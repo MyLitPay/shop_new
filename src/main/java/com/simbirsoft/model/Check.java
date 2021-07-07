@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,20 +23,10 @@ public class Check {
     @OneToMany(mappedBy = "check",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<Operation> operations = new ArrayList<>();
+    private List<Operation> operations;
 
     private Double totalSum;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
-
-    public void addOperation(Operation operation) {
-        operations.add(operation);
-        operation.setCheck(this);
-    }
-
-    public void deleteOperation(Operation operation) {
-        operations.remove(operation);
-        operation.setCheck(null);
-    }
 }

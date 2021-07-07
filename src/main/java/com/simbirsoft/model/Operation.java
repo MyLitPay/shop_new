@@ -16,8 +16,8 @@ public class Operation {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Enumerated(EnumType.ORDINAL)
-    private OperationsEnum operation;
+    @Enumerated(EnumType.STRING)
+    private OperationType operation;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "prod_id", referencedColumnName = "id")
@@ -40,18 +40,4 @@ public class Operation {
     @JoinColumn(name = "cancellation_id")
     private Cancellation cancellation;
 
-    public String getNameOfOperation() {
-        String nameOfOperation;
-        switch (operation.getNumOfOperation()) {
-            case 0: nameOfOperation = OperationsEnum.SUPPLY.toString();
-                break;
-            case 1: nameOfOperation = OperationsEnum.SELLING.toString();
-                break;
-            case 2: nameOfOperation = OperationsEnum.RESCUE.toString();
-                break;
-            default: nameOfOperation = "unknown operation";
-                break;
-        }
-        return nameOfOperation;
-    }
 }

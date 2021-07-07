@@ -11,7 +11,7 @@ databaseChangeLog:
             sequenceName: hibernate_sequence
             startValue: 1
   - changeSet:
-      id: create-table-products
+      id: init-tables
       author: mike
 #      preConditions:
 #        - onFail: MARK_RAN
@@ -118,7 +118,7 @@ databaseChangeLog:
                   type: int4
               - column:
                   name: operation
-                  type: int2
+                  type: varchar(255)
               - column:
                   name: sum
                   type: float8

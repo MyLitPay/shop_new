@@ -1,13 +1,13 @@
 package com.simbirsoft.model;
 
-public enum OperationsEnum {
+public enum OperationType {
     SUPPLY(0),
     SELLING(1),
     RESCUE(2);
 
     private final int numOfOperation;
 
-    OperationsEnum(int numOfOperation) {
+    OperationType(int numOfOperation) {
         this.numOfOperation = numOfOperation;
     }
 
