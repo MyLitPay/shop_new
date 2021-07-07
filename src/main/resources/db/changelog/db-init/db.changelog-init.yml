@@ -1,0 +1,142 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-sequence
+      author: mike
+      changes:
+        - createSequence:
+            cacheSize: 1
+            cycle: false
+            dataType: int8
+            incrementBy: 1
+            sequenceName: hibernate_sequence
+            startValue: 1
+  - changeSet:
+      id: init-tables
+      author: mike
+#      preConditions:
+#        - onFail: MARK_RAN
+#          not:
+#            - tableExists:
+#                tableName: products
+      changes:
+        - createTable:
+              tableName: groups
+              columns:
+                - column:
+                    autoIncrement: true
+                    constraints:
+                      nullable: false
+                      primaryKey: true
+                    name: id
+                    type: int8
+                - column:
+                    name: group_name
+                    type: varchar(255)
+        - createTable:
+            tableName: products
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: int8
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: price
+                  type: float8
+              - column:
+                  constraints:
+                    foreignKeyName: prod_group_fkey
+                    references: groups(id)
+                  name: group_id
+                  type: int8
+        - createTable:
+            tableName: prod_amount
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    foreignKeyName: amount_prod_fkey
+                    references: products(id)
+                  name: prod_id
+                  type: int8
+              - column:
+                  name: amount
+                  type: int4
+        - createTable:
+            tableName: checks
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: int8
+              - column:
+                  name: date
+                  type: timestamp
+              - column:
+                  name: description
+                  type: varchar(255)
+              - column:
+                  name: total_sum
+                  type: float8
+        - createTable:
+            tableName: cancellations
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: int8
+              - column:
+                  name: date
+                  type: timestamp
+              - column:
+                  name: reason
+                  type: varchar(255)
+        - createTable:
+            tableName: operations
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: int8
+              - column:
+                  name: prod_amount
+                  type: int4
+              - column:
+                  name: operation
+                  type: varchar(255)
+              - column:
+                  name: sum
+                  type: float8
+              - column:
+                  constraints:
+                    foreignKeyName: oper_cancellation_fkey
+                    references: cancellations(id)
+                  name: cancellation_id
+                  type: int8
+              - column:
+                  constraints:
+                    foreignKeyName: oper_check_fkey
+                    references: checks(id)
+                  name: check_id
+                  type: int8
+              - column:
+                  constraints:
+                    foreignKeyName: oper_prod_fkey
+                    references: products(id)
+                  name: prod_id
+                  type: int8
