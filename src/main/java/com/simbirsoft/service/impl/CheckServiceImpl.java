@@ -3,6 +3,7 @@ package com.simbirsoft.service.impl;
 import com.simbirsoft.api.dto.CheckDto;
 import com.simbirsoft.api.response.ResultResponse;
 import com.simbirsoft.api.response.ResultResponseType;
+import com.simbirsoft.exception.CancellationNotFoundException;
 import com.simbirsoft.exception.CheckNotFoundException;
 import com.simbirsoft.mapper.CheckMapper;
 import com.simbirsoft.model.Check;
@@ -25,14 +26,14 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
-    public ResponseEntity<List<CheckDto>> getAllChecks() {
+    public List<CheckDto> getAllChecks() {
         List<CheckDto> list = checkRepository.findAll().stream()
                 .map(CheckMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
         if (list.isEmpty()) {
-            return new ResponseEntity<>(list, HttpStatus.NOT_FOUND);
+            throw new CancellationNotFoundException("Checks not found");
         }
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return list;
     }
 
     @Override
@@ -43,7 +44,7 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
-    public ResponseEntity<List<CheckDto>> updateAllChecks(List<CheckDto> request) {
+    public List<CheckDto> updateAllChecks(List<CheckDto> request) {
         List<Check> checkList = new ArrayList<>();
 
         for (CheckDto dto : request) {

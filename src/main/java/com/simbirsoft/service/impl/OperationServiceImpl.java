@@ -33,7 +33,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public ResponseEntity<List<OperationDto>> getAllOperations() {
+    public List<OperationDto> getAllOperations() {
         List<OperationDto> operations = new ArrayList<>();
 
         for (Operation operation : operationRepository.findAll()) {
@@ -42,9 +42,9 @@ public class OperationServiceImpl implements OperationService {
             operations.add(dto);
         }
         if (operations.isEmpty()) {
-            return new ResponseEntity<>(operations, HttpStatus.NOT_FOUND);
+            throw new CancellationNotFoundException("Operations not found");
         }
-        return new ResponseEntity<>(operations, HttpStatus.OK);
+        return operations;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public ResponseEntity<List<OperationDto>> updateAllOperations(List<OperationDto> request) {
+    public List<OperationDto> updateAllOperations(List<OperationDto> request) {
         List<Operation> operationList = new ArrayList<>();
 
         for (OperationDto dto : request) {

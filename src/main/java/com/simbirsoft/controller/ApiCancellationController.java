@@ -18,7 +18,7 @@ public class ApiCancellationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CancellationDto>> getAllCancellations() {
+    public List<CancellationDto> getAllCancellations() {
         return cancellationService.getAllCancellations();
     }
 
@@ -28,7 +28,7 @@ public class ApiCancellationController {
     }
 
     @PutMapping
-    public ResponseEntity<List<CancellationDto>> updateAllCancellations(@RequestBody List<CancellationDto> request) {
+    public List<CancellationDto> updateAllCancellations(@RequestBody List<CancellationDto> request) {
         return cancellationService.updateAllCancellations(request);
     }
 

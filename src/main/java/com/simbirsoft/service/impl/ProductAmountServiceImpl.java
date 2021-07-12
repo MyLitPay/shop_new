@@ -3,6 +3,7 @@ package com.simbirsoft.service.impl;
 import com.simbirsoft.api.dto.ProductAmountDto;
 import com.simbirsoft.api.response.ResultResponse;
 import com.simbirsoft.api.response.ResultResponseType;
+import com.simbirsoft.exception.CancellationNotFoundException;
 import com.simbirsoft.exception.ProductAmountNotFoundException;
 import com.simbirsoft.exception.ProductNotFoundException;
 import com.simbirsoft.mapper.ProductAmountMapper;
@@ -30,14 +31,14 @@ public class ProductAmountServiceImpl implements ProductAmountService {
     }
 
     @Override
-    public ResponseEntity<List<ProductAmountDto>> getAllProductAmounts() {
+    public List<ProductAmountDto> getAllProductAmounts() {
         List<ProductAmountDto> list = productAmountRepository.findAll().stream()
                 .map(ProductAmountMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
         if (list.isEmpty()) {
-            return new ResponseEntity<>(list, HttpStatus.NOT_FOUND);
+            throw new CancellationNotFoundException("Product amounts not found");
         }
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return list;
     }
 
     @Override
@@ -49,7 +50,7 @@ public class ProductAmountServiceImpl implements ProductAmountService {
     }
 
     @Override
-    public ResponseEntity<List<ProductAmountDto>> updateAllProductAmounts(List<ProductAmountDto> request) {
+    public List<ProductAmountDto> updateAllProductAmounts(List<ProductAmountDto> request) {
         List<ProductAmount> productAmountList = new ArrayList<>();
 
         for (ProductAmountDto dto : request) {

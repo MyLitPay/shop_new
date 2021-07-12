@@ -8,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface ProductService {
-    ResponseEntity<List<ProductDto>> getAllProducts();
+    List<ProductDto> getAllProducts();
     ProductDto addProduct(ProductDto dto);
-    ResponseEntity<List<ProductDto>> updateAllProducts(List<ProductDto> request);
+    List<ProductDto> updateAllProducts(List<ProductDto> request);
     ResultResponse deleteAllProducts();
     ProductDto getProductById(Long id);
     ProductDto updateProductById(Long id, ProductDto dto);

@@ -18,7 +18,7 @@ public class ApiCheckController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CheckDto>> getAllChecks() {
+    public List<CheckDto> getAllChecks() {
         return checkService.getAllChecks();
     }
 
@@ -28,7 +28,7 @@ public class ApiCheckController {
     }
 
     @PutMapping
-    public ResponseEntity<List<CheckDto>> updateAllChecks(@RequestBody List<CheckDto> request) {
+    public List<CheckDto> updateAllChecks(@RequestBody List<CheckDto> request) {
         return checkService.updateAllChecks(request);
     }
 

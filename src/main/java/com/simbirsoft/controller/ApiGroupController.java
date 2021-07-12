@@ -19,7 +19,7 @@ public class ApiGroupController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GroupDto>> getAllGroups() {
+    public List<GroupDto> getAllGroups() {
         return groupService.getAllGroups();
     }
 
@@ -29,7 +29,7 @@ public class ApiGroupController {
     }
 
     @PutMapping
-    public ResponseEntity<List<GroupDto>> updateAllGroups(@RequestBody List<GroupDto> request) {
+    public List<GroupDto> updateAllGroups(@RequestBody List<GroupDto> request) {
         return groupService.updateAllGroups(request);
     }
 

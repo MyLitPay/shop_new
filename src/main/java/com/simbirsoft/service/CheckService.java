@@ -8,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface CheckService {
-    ResponseEntity<List<CheckDto>> getAllChecks();
+    List<CheckDto> getAllChecks();
     CheckDto addCheck(CheckDto dto);
-    ResponseEntity<List<CheckDto>> updateAllChecks(List<CheckDto> request);
+    List<CheckDto> updateAllChecks(List<CheckDto> request);
     ResultResponse deleteAllChecks();
     CheckDto getCheckById(Long id);
     CheckDto updateCheckById(Long id, CheckDto dto);

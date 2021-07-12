@@ -18,7 +18,7 @@ public class ApiOperationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OperationDto>> getAllOperations() {
+    public List<OperationDto> getAllOperations() {
         return operationService.getAllOperations();
     }
 
@@ -28,7 +28,7 @@ public class ApiOperationController {
     }
 
     @PutMapping
-    public ResponseEntity<List<OperationDto>> updateAllOperations(@RequestBody List<OperationDto> request) {
+    public List<OperationDto> updateAllOperations(@RequestBody List<OperationDto> request) {
         return operationService.updateAllOperations(request);
     }
 

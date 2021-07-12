@@ -26,14 +26,14 @@ public class CancellationServiceImpl implements CancellationService {
     }
 
     @Override
-    public ResponseEntity<List<CancellationDto>> getAllCancellations() {
+    public List<CancellationDto> getAllCancellations() {
         List<CancellationDto> list = cancellationRepository.findAll().stream()
                 .map(CancellationMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
         if (list.isEmpty()) {
-            return new ResponseEntity<>(list, HttpStatus.NOT_FOUND);
+            throw new CancellationNotFoundException("Cancellations not found");
         }
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return list;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class CancellationServiceImpl implements CancellationService {
     }
 
     @Override
-    public ResponseEntity<List<CancellationDto>> updateAllCancellations(List<CancellationDto> request) {
+    public List<CancellationDto> updateAllCancellations(List<CancellationDto> request) {
         List<Cancellation> cancellationList = new ArrayList<>();
 
         for (CancellationDto dto : request) {

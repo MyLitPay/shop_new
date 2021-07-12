@@ -8,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface GroupService {
-    ResponseEntity<List<GroupDto>> getAllGroups();
+    List<GroupDto> getAllGroups();
     GroupDto addGroup(GroupDto dto);
-    ResponseEntity<List<GroupDto>> updateAllGroups(List<GroupDto> request);
+    List<GroupDto> updateAllGroups(List<GroupDto> request);
     ResultResponse deleteAllGroups();
     GroupDto getGroupById(Long id);
     GroupDto updateGroupById(Long id, GroupDto dto);

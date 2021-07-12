@@ -3,6 +3,7 @@ package com.simbirsoft.service.impl;
 import com.simbirsoft.api.dto.GroupDto;
 import com.simbirsoft.api.response.ResultResponse;
 import com.simbirsoft.api.response.ResultResponseType;
+import com.simbirsoft.exception.CancellationNotFoundException;
 import com.simbirsoft.exception.GroupNotFoundException;
 import com.simbirsoft.mapper.GroupMapper;
 import com.simbirsoft.model.Group;
@@ -25,14 +26,14 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public ResponseEntity<List<GroupDto>> getAllGroups() {
+    public List<GroupDto> getAllGroups() {
         List<GroupDto> list = groupRepository.findAll().stream()
                 .map(GroupMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
         if (list.isEmpty()) {
-            return new ResponseEntity<>(list, HttpStatus.NOT_FOUND);
+            throw new CancellationNotFoundException("Groups not found");
         }
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return list;
     }
 
     @Override
@@ -43,7 +44,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public ResponseEntity<List<GroupDto>> updateAllGroups(List<GroupDto> request) {
+    public List<GroupDto> updateAllGroups(List<GroupDto> request) {
         List<Group> groupList = new ArrayList<>();
 
         for (GroupDto dto : request) {

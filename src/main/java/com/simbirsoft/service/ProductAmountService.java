@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface ProductAmountService {
-    ResponseEntity<List<ProductAmountDto>> getAllProductAmounts();
+    List<ProductAmountDto> getAllProductAmounts();
     ProductAmountDto addProductAmount(ProductAmountDto dto);
-    ResponseEntity<List<ProductAmountDto>> updateAllProductAmounts(List<ProductAmountDto> request);
+    List<ProductAmountDto> updateAllProductAmounts(List<ProductAmountDto> request);
     ResultResponse deleteAllProductAmounts();
     ProductAmountDto getProductAmountById(Long id);
     ProductAmountDto updateProductAmountById(Long id, ProductAmountDto dto);

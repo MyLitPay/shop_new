@@ -18,7 +18,7 @@ public class ApiProductAmountController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductAmountDto>> getAllProductAmounts() {
+    public List<ProductAmountDto> getAllProductAmounts() {
         return productAmountService.getAllProductAmounts();
     }
 
@@ -28,7 +28,7 @@ public class ApiProductAmountController {
     }
 
     @PutMapping
-    public ResponseEntity<List<ProductAmountDto>> updateAllProductAmounts(@RequestBody List<ProductAmountDto> request) {
+    public List<ProductAmountDto> updateAllProductAmounts(@RequestBody List<ProductAmountDto> request) {
         return productAmountService.updateAllProductAmounts(request);
     }
 

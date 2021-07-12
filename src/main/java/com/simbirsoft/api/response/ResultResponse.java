@@ -18,4 +18,8 @@ public class ResultResponse {
     public ResultResponse(ResultResponseType type) {
         this.result = type.name();
     }
+
+    public ResultResponse(String result) {
+        this.result = result;
+    }
 }

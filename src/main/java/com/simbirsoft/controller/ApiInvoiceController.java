@@ -18,7 +18,7 @@ public class ApiInvoiceController {
     }
 
     @GetMapping
-    public ResponseEntity<List<InvoiceDto>> getAllInvoices() {
+    public List<InvoiceDto> getAllInvoices() {
         return invoiceService.getAllInvoices();
     }
 
@@ -28,7 +28,7 @@ public class ApiInvoiceController {
     }
 
     @PutMapping
-    public ResponseEntity<List<InvoiceDto>> updateAllInvoices(@RequestBody List<InvoiceDto> request) {
+    public List<InvoiceDto> updateAllInvoices(@RequestBody List<InvoiceDto> request) {
         return invoiceService.updateAllInvoices(request);
     }
 

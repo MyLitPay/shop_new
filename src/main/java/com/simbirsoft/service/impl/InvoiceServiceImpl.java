@@ -3,6 +3,7 @@ package com.simbirsoft.service.impl;
 import com.simbirsoft.api.dto.InvoiceDto;
 import com.simbirsoft.api.response.ResultResponse;
 import com.simbirsoft.api.response.ResultResponseType;
+import com.simbirsoft.exception.CancellationNotFoundException;
 import com.simbirsoft.exception.GroupNotFoundException;
 import com.simbirsoft.exception.InvoiceNotFoundException;
 import com.simbirsoft.mapper.InvoiceMapper;
@@ -30,14 +31,14 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public ResponseEntity<List<InvoiceDto>> getAllInvoices() {
+    public List<InvoiceDto> getAllInvoices() {
         List<InvoiceDto> list = invoiceRepository.findAll().stream()
                 .map(InvoiceMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
         if (list.isEmpty()) {
-            return new ResponseEntity<>(list, HttpStatus.NOT_FOUND);
+            throw new CancellationNotFoundException("Invoices not found");
         }
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return list;
     }
 
     @Override
@@ -48,7 +49,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public ResponseEntity<List<InvoiceDto>> updateAllInvoices(List<InvoiceDto> request) {
+    public List<InvoiceDto> updateAllInvoices(List<InvoiceDto> request) {
         List<Invoice> invoiceList = new ArrayList<>();
 
         for (InvoiceDto invoiceDto : request) {

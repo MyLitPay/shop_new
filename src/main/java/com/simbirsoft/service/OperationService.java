@@ -8,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface OperationService {
-    ResponseEntity<List<OperationDto>> getAllOperations();
+    List<OperationDto> getAllOperations();
     OperationDto addOperation(OperationDto dto);
-    ResponseEntity<List<OperationDto>> updateAllOperations(List<OperationDto> request);
+    List<OperationDto> updateAllOperations(List<OperationDto> request);
     ResultResponse deleteAllOperations();
     OperationDto getOperationById(Long id);
     OperationDto updateOperationById(Long id, OperationDto dto);

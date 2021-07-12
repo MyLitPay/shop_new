@@ -8,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface CancellationService {
-    ResponseEntity<List<CancellationDto>> getAllCancellations();
+    List<CancellationDto> getAllCancellations();
     CancellationDto addCancellation(CancellationDto dto);
-    ResponseEntity<List<CancellationDto>> updateAllCancellations(List<CancellationDto> request);
+    List<CancellationDto> updateAllCancellations(List<CancellationDto> request);
     ResultResponse deleteAllCancellations();
     CancellationDto getCancellationById(Long id);
     CancellationDto updateCancellationById(Long id, CancellationDto dto);
