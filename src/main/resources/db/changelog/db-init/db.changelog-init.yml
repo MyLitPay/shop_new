@@ -58,9 +58,14 @@ databaseChangeLog:
             tableName: prod_amount
             columns:
               - column:
+                  autoIncrement: true
                   constraints:
                     nullable: false
                     primaryKey: true
+                  name: id
+                  type: int8
+              - column:
+                  constraints:
                     foreignKeyName: amount_prod_fkey
                     references: products(id)
                   name: prod_id
@@ -139,4 +144,43 @@ databaseChangeLog:
                     foreignKeyName: oper_prod_fkey
                     references: products(id)
                   name: prod_id
+                  type: int8
+  - changeSet:
+      id: alter-table-invoices
+      author: mike
+      changes:
+        - createTable:
+            tableName: invoices
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: int8
+              - column:
+                  name: product_name
+                  type: varchar(255)
+              - column:
+                  name: amount
+                  type: int4
+              - column:
+                  name: price
+                  type: float8
+              - column:
+                  name: sum
+                  type: float8
+  - changeSet:
+      id: add-column-invoices
+      author: mike
+      changes:
+        - addColumn:
+            tableName: invoices
+            columns:
+              - column:
+                  constraints:
+                    foreignKeyName: invoice_group_fkey
+                    references: groups(id)
+                  name: group_id
                   type: int8

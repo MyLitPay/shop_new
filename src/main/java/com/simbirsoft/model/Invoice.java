@@ -1,29 +1,29 @@
 package com.simbirsoft.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 @Entity
-@Table(name = "products")
+@Table(name = "invoices")
 @NoArgsConstructor
 @Getter @Setter
-@EqualsAndHashCode(of = {"id", "name", "price"})
-public class Product {
+public class Invoice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @Column(name = "product_name")
     private String name;
 
+    private Integer amount;
+
     private Double price;
+
+    private Double sum;
 
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
@@ -31,8 +31,4 @@ public class Product {
     @JoinColumn(name = "group_id")
     private Group group;
 
-    @OneToMany(mappedBy = "product",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    private List<Operation> operations;
 }

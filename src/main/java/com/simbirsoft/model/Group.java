@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,4 +25,9 @@ public class Group {
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private List<Product> products;
+
+    @OneToMany(mappedBy = "group",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Invoice> invoices;
 }

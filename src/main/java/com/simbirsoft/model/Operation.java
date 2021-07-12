@@ -8,7 +8,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "operations")
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 public class Operation {
 
@@ -19,8 +20,10 @@ public class Operation {
     @Enumerated(EnumType.STRING)
     private OperationType operation;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "prod_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE,
+                    CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "prod_id")
     private Product product;
 
     @Column(name = "prod_amount")

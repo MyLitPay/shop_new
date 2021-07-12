@@ -1,9 +1,9 @@
 package com.simbirsoft.model;
 
 public enum OperationType {
-    SUPPLY(0),
-    SELLING(1),
-    RESCUE(2);
+    SELLING(0),
+    RESCUE(1),
+    NOT_DEFINE(2);
 
     private final int numOfOperation;
 
