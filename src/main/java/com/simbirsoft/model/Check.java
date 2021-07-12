@@ -25,7 +25,7 @@ public class Check {
     @OneToMany(mappedBy = "check",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<Operation> operations = new ArrayList<>();
+    private List<Operation> operations;
 
     private Double totalSum;
 

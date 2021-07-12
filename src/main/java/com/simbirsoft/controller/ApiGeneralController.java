@@ -17,8 +17,8 @@ public class ApiGeneralController {
     }
 
     @PostMapping("/product/add")
-    public ResultResponse addProductByInvoiceId(@RequestParam Long invoiceId) {
-        return generalService.addProductByInvoiceId(invoiceId);
+    public void addProductByInvoiceId(@RequestParam Long invoiceId) {
+        generalService.addProductByInvoiceId(invoiceId);
     }
 
     @PostMapping("/check/add")

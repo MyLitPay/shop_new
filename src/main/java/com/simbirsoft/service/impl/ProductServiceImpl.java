@@ -11,6 +11,8 @@ import com.simbirsoft.model.Product;
 import com.simbirsoft.repo.GroupRepository;
 import com.simbirsoft.repo.ProductRepository;
 import com.simbirsoft.service.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,10 +31,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> getAllProducts() {
-        return productRepository.findAll().stream()
+    public ResponseEntity<List<ProductDto>> getAllProducts() {
+        List<ProductDto> list = productRepository.findAll().stream()
                 .map(ProductMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
+        if (list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @Override
@@ -43,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> updateAllProducts(List<ProductDto> request) {
+    public ResponseEntity<List<ProductDto>> updateAllProducts(List<ProductDto> request) {
         List<Product> productList = new ArrayList<>();
 
         for (ProductDto dto : request) {
@@ -82,15 +88,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResultResponse deleteProductById(Long id) {
-        try {
-            deleteConstraints(productRepository.findById(id)
-                    .orElseThrow(() -> new ProductNotFoundException("Product not found")));
+    public void deleteProductById(Long id) {
+            deleteConstraints(findProductById(id));
             productRepository.deleteById(id);
-            return new ResultResponse(ResultResponseType.OK);
-        } catch (Exception ex) {
-            return new ResultResponse(ResultResponseType.ERROR);
-        }
     }
 
     public Product findProductById(long id) {
@@ -113,6 +113,9 @@ public class ProductServiceImpl implements ProductService {
         if (dto.getGroupId() != null) {
             Group group = getGroupFromDB(dto.getGroupId());
             product.setGroup(group);
+            if (group.getProducts() == null) {
+                group.setProducts(new ArrayList<>());
+            }
             group.getProducts().add(product);
         }
         return product;
@@ -129,78 +132,4 @@ public class ProductServiceImpl implements ProductService {
         return groupRepository.findById(id)
                 .orElseThrow(() -> new GroupNotFoundException("Group not found"));
     }
-
-//    @Override
-//    public List<ProductDto> getProducts() {
-////        return getProductDTOList(productRepository.findAll());
-//        return null;
-//    }
-//
-//    @Override
-//    public ResultResponse addProduct(InvoiceDto invoiceDto) {
-//        try {
-//            Invoice invoice = new Invoice();
-//            invoice.setProductName(invoiceDto.getName());
-//            invoice.setAmount(invoiceDto.getAmount());
-//            invoice.setPrice(invoiceDto.getPrice());
-//            invoice.setSum(invoice.getSum());
-//            invoiceRepository.saveAndFlush(invoice);
-//
-//            Product dbProduct = productRepository
-//                    .findByNameAndPrice(invoice.getProductName(), invoice.getPrice())
-//                    .orElse(null);
-//
-//            Group dbGroup = groupRepository.
-//                    findByName(invoiceDto.getGroupName())
-//                    .orElse(null);
-//
-//            Product product;
-//            Group group;
-//            ProductAmount productAmount;
-//
-//            if (dbProduct == null) {
-//                product = new Product();
-//                product.setName(invoice.getProductName());
-//                product.setPrice(invoice.getPrice());
-//
-//                if (dbGroup == null) {
-//                    group = new Group();
-//                    group.setName(invoiceDto.getName());
-//
-//                    product.setGroup(group);
-//                    group.setProducts(new ArrayList<>());
-//                    group.getProducts().add(product);
-//                    groupRepository.saveAndFlush(group);
-//                } else {
-//                    product.setGroup(dbGroup);
-//                    dbGroup.getProducts().add(product);
-//                    groupRepository.saveAndFlush(dbGroup);
-//                }
-//
-//                productAmount = new ProductAmount();
-//                productAmount.setProduct(product);
-//                productAmount.setAmount(invoice.getAmount());
-//                productAmountRepository.saveAndFlush(productAmount);
-//                productRepository.saveAndFlush(product);
-//
-//            } else {
-//                ProductAmount dbProductAmount = productAmountRepository
-//                        .findById(dbProduct.getId())
-//                        .orElseThrow(() -> new ProductAmountNotFoundException("Amount not found"));
-//                dbProductAmount.setAmount(dbProductAmount.getAmount() + invoice.getAmount());
-//                productAmountRepository.saveAndFlush(dbProductAmount);
-//            }
-//
-//            return new ResultResponse(true);
-//
-//        } catch (Exception ex) {
-//            return new ResultResponse(false);
-//        }
-//    }
-//
-//    private List<ProductDto> getProductDTOList(List<Product> products) {
-//        return products.stream()
-//                .map(ProductDto::new)
-//                .collect(Collectors.toList());
-//    }
 }

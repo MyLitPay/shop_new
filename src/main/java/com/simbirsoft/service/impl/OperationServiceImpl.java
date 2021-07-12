@@ -11,6 +11,8 @@ import com.simbirsoft.repo.CheckRepository;
 import com.simbirsoft.repo.OperationRepository;
 import com.simbirsoft.repo.ProductRepository;
 import com.simbirsoft.service.OperationService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public List<OperationDto> getAllOperations() {
+    public ResponseEntity<List<OperationDto>> getAllOperations() {
         List<OperationDto> operations = new ArrayList<>();
 
         for (Operation operation : operationRepository.findAll()) {
@@ -39,7 +41,10 @@ public class OperationServiceImpl implements OperationService {
             dto.setOperation(operation.getOperation().name());
             operations.add(dto);
         }
-        return operations;
+        if (operations.isEmpty()) {
+            return new ResponseEntity<>(operations, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(operations, HttpStatus.OK);
     }
 
     @Override
@@ -54,7 +59,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public List<OperationDto> updateAllOperations(List<OperationDto> request) {
+    public ResponseEntity<List<OperationDto>> updateAllOperations(List<OperationDto> request) {
         List<Operation> operationList = new ArrayList<>();
 
         for (OperationDto dto : request) {
@@ -104,15 +109,9 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public ResultResponse deleteOperationById(Long id) {
-        try {
-            deleteConstraints(operationRepository.findById(id)
-                    .orElseThrow(() -> new OperationNotFoundException("Operation not found")));
+    public void deleteOperationById(Long id) {
+            deleteConstraints(findOperationById(id));
             operationRepository.deleteById(id);
-            return new ResultResponse(ResultResponseType.OK);
-        } catch (Exception ex) {
-            return new ResultResponse(ResultResponseType.ERROR);
-        }
     }
 
     public Operation findOperationById(long id) {
@@ -144,11 +143,17 @@ public class OperationServiceImpl implements OperationService {
         if (dto.getProdId() != null) {
             Product product = getProductFromDB(dto.getProdId());
             operation.setProduct(product);
+            if (product.getOperations() == null) {
+                product.setOperations(new ArrayList<>());
+            }
             product.getOperations().add(operation);
         }
         if (dto.getCheckId() != null) {
             Check check = getCheckFromDB(dto.getCheckId());
             operation.setCheck(check);
+            if (check.getOperations() == null) {
+                check.setOperations(new ArrayList<>());
+            }
             check.getOperations().add(operation);
         } else {
             operation.setCheck(new Check());
@@ -156,6 +161,9 @@ public class OperationServiceImpl implements OperationService {
         if (dto.getCancellationId() != null) {
             Cancellation cancellation = getCancellationFromDB(dto.getCancellationId());
             operation.setCancellation(cancellation);
+            if (cancellation.getOperations() == null) {
+                cancellation.setOperations(new ArrayList<>());
+            }
             cancellation.getOperations().add(operation);
         } else {
             operation.setCancellation(new Cancellation());

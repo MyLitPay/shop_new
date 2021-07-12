@@ -3,6 +3,7 @@ package com.simbirsoft.controller;
 import com.simbirsoft.api.dto.InvoiceDto;
 import com.simbirsoft.api.response.ResultResponse;
 import com.simbirsoft.service.InvoiceService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class ApiInvoiceController {
     }
 
     @GetMapping
-    public List<InvoiceDto> getAllInvoices() {
+    public ResponseEntity<List<InvoiceDto>> getAllInvoices() {
         return invoiceService.getAllInvoices();
     }
 
@@ -27,7 +28,7 @@ public class ApiInvoiceController {
     }
 
     @PutMapping
-    public List<InvoiceDto> updateAllInvoices(@RequestBody List<InvoiceDto> request) {
+    public ResponseEntity<List<InvoiceDto>> updateAllInvoices(@RequestBody List<InvoiceDto> request) {
         return invoiceService.updateAllInvoices(request);
     }
 
@@ -43,12 +44,12 @@ public class ApiInvoiceController {
 
     @PutMapping("/{id}")
     public InvoiceDto updateInvoiceById(@PathVariable("id") Long id,
-                                     @RequestBody InvoiceDto invoiceDto) {
+                                        @RequestBody InvoiceDto invoiceDto) {
         return invoiceService.updateInvoiceById(id, invoiceDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResultResponse deleteInvoiceById(@PathVariable("id") Long id) {
-        return invoiceService.deleteInvoiceById(id);
+    public void deleteInvoiceById(@PathVariable("id") Long id) {
+        invoiceService.deleteInvoiceById(id);
     }
 }

@@ -24,10 +24,10 @@ public class Group {
     @OneToMany(mappedBy = "group",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<Product> products = new ArrayList<>();
+    private List<Product> products;
 
     @OneToMany(mappedBy = "group",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<Invoice> invoices = new ArrayList<>();
+    private List<Invoice> invoices;
 }

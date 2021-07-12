@@ -4,10 +4,13 @@ import com.simbirsoft.api.dto.CancellationDto;
 import com.simbirsoft.api.response.ResultResponse;
 import com.simbirsoft.api.response.ResultResponseType;
 import com.simbirsoft.exception.CancellationNotFoundException;
+import com.simbirsoft.exception.OperationNotFoundException;
 import com.simbirsoft.mapper.CancellationMapper;
 import com.simbirsoft.model.Cancellation;
 import com.simbirsoft.repo.CancellationRepository;
 import com.simbirsoft.service.CancellationService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,10 +26,14 @@ public class CancellationServiceImpl implements CancellationService {
     }
 
     @Override
-    public List<CancellationDto> getAllCancellations() {
-        return cancellationRepository.findAll().stream()
+    public ResponseEntity<List<CancellationDto>> getAllCancellations() {
+        List<CancellationDto> list = cancellationRepository.findAll().stream()
                 .map(CancellationMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
+        if (list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @Override
@@ -37,7 +44,7 @@ public class CancellationServiceImpl implements CancellationService {
     }
 
     @Override
-    public List<CancellationDto> updateAllCancellations(List<CancellationDto> request) {
+    public ResponseEntity<List<CancellationDto>> updateAllCancellations(List<CancellationDto> request) {
         List<Cancellation> cancellationList = new ArrayList<>();
 
         for (CancellationDto dto : request) {
@@ -73,13 +80,9 @@ public class CancellationServiceImpl implements CancellationService {
     }
 
     @Override
-    public ResultResponse deleteCancellationById(Long id) {
-        try {
-            cancellationRepository.deleteById(id);
-            return new ResultResponse(ResultResponseType.OK);
-        } catch (Exception ex) {
-            return new ResultResponse(ResultResponseType.ERROR);
-        }
+    public void deleteCancellationById(Long id) {
+        findCancellationById(id);
+        cancellationRepository.deleteById(id);
     }
 
     public Cancellation findCancellationById(long id) {

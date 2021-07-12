@@ -3,6 +3,7 @@ package com.simbirsoft.controller;
 import com.simbirsoft.api.dto.CancellationDto;
 import com.simbirsoft.api.response.ResultResponse;
 import com.simbirsoft.service.CancellationService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class ApiCancellationController {
     }
 
     @GetMapping
-    public List<CancellationDto> getAllCancellations() {
+    public ResponseEntity<List<CancellationDto>> getAllCancellations() {
         return cancellationService.getAllCancellations();
     }
 
@@ -27,7 +28,7 @@ public class ApiCancellationController {
     }
 
     @PutMapping
-    public List<CancellationDto> updateAllCancellations(@RequestBody List<CancellationDto> request) {
+    public ResponseEntity<List<CancellationDto>> updateAllCancellations(@RequestBody List<CancellationDto> request) {
         return cancellationService.updateAllCancellations(request);
     }
 
@@ -48,7 +49,7 @@ public class ApiCancellationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResultResponse deleteCancellationById(@PathVariable("id") Long id) {
-        return cancellationService.deleteCancellationById(id);
+    public void deleteCancellationById(@PathVariable("id") Long id) {
+        cancellationService.deleteCancellationById(id);
     }
 }

@@ -3,6 +3,7 @@ package com.simbirsoft.controller;
 import com.simbirsoft.api.dto.GroupDto;
 import com.simbirsoft.api.response.ResultResponse;
 import com.simbirsoft.service.GroupService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class ApiGroupController {
     }
 
     @GetMapping
-    public List<GroupDto> getAllGroups() {
+    public ResponseEntity<List<GroupDto>> getAllGroups() {
         return groupService.getAllGroups();
     }
 
@@ -28,7 +29,7 @@ public class ApiGroupController {
     }
 
     @PutMapping
-    public List<GroupDto> updateAllGroups(@RequestBody List<GroupDto> request) {
+    public ResponseEntity<List<GroupDto>> updateAllGroups(@RequestBody List<GroupDto> request) {
         return groupService.updateAllGroups(request);
     }
 
@@ -44,12 +45,12 @@ public class ApiGroupController {
 
     @PutMapping("/{id}")
     public GroupDto updateGroupById(@PathVariable("id") Long id,
-                                     @RequestBody GroupDto dto) {
+                                    @RequestBody GroupDto dto) {
         return groupService.updateGroupById(id, dto);
     }
 
     @DeleteMapping("/{id}")
-    public ResultResponse deleteGroupById(@PathVariable("id") Long id) {
-        return groupService.deleteGroupById(id);
+    public void deleteGroupById(@PathVariable("id") Long id) {
+        groupService.deleteGroupById(id);
     }
 }

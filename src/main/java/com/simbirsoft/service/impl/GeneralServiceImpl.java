@@ -8,6 +8,7 @@ import com.simbirsoft.api.response.ResultResponseType;
 import com.simbirsoft.mapper.CheckMapper;
 import com.simbirsoft.mapper.InvoiceDtoToProductDtoMapper;
 import com.simbirsoft.mapper.ProductAmountMapper;
+import com.simbirsoft.mapper.ProductToProductForCheckDtoMapper;
 import com.simbirsoft.model.Check;
 import com.simbirsoft.model.Operation;
 import com.simbirsoft.model.Product;
@@ -43,8 +44,7 @@ public class GeneralServiceImpl implements GeneralService {
         this.operationService = operationService;
     }
 
-    public ResultResponse addProductByInvoiceId(Long invoiceId) {
-        try {
+    public void addProductByInvoiceId(Long invoiceId) {
             InvoiceDto invoiceDto = invoiceService.getInvoiceById(invoiceId);
             Product product = productService.findByNameAndPrice(invoiceDto.getName(), invoiceDto.getPrice());
             if (product == null) {
@@ -61,11 +61,6 @@ public class GeneralServiceImpl implements GeneralService {
                 productAmount.setAmount(productAmount.getAmount() + invoiceDto.getAmount());
                 productAmountService.updateProductAmountById(productAmount.getId(), ProductAmountMapper.INSTANCE.toDTO(productAmount));
             }
-            return new ResultResponse(ResultResponseType.OK);
-
-        } catch (Exception ex) {
-            return new ResultResponse(ResultResponseType.ERROR);
-        }
     }
 
     @Override
@@ -79,10 +74,7 @@ public class GeneralServiceImpl implements GeneralService {
 
         List<ProductForCheckDto> productForCheckDtoList = new ArrayList<>();
         for (Product product : productList) {
-            ProductForCheckDto productForCheckDto = new ProductForCheckDto();
-            productForCheckDto.setId(product.getId());
-            productForCheckDto.setProductName(product.getName());
-            productForCheckDto.setPrice(product.getPrice());
+            ProductForCheckDto productForCheckDto = ProductToProductForCheckDtoMapper.INSTANCE.toProductForCheckDto(product);
             productForCheckDto.setGroupName(product.getGroup().getName());
             productForCheckDto.setAmount(operationDto.getAmount());
             productForCheckDto.setSum(operationDto.getSum());

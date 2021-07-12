@@ -1,5 +1,6 @@
 package com.simbirsoft.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import java.util.Objects;
 @Table(name = "products")
 @NoArgsConstructor
 @Getter @Setter
+@EqualsAndHashCode(of = {"id", "name", "price"})
 public class Product {
 
     @Id
@@ -29,25 +31,8 @@ public class Product {
     @JoinColumn(name = "group_id")
     private Group group;
 
-//    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-//    private ProductAmount productAmount;
-
-//    @OneToOne(mappedBy = "product")
     @OneToMany(mappedBy = "product",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<Operation> operations = new ArrayList<>();
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return Objects.equals(id, product.id) && Objects.equals(name, product.name) && Objects.equals(price, product.price);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, price);
-    }
+    private List<Operation> operations;
 }

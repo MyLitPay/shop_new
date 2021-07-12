@@ -6,7 +6,7 @@ import com.simbirsoft.api.response.CheckResponse;
 import com.simbirsoft.api.response.ResultResponse;
 
 public interface GeneralService {
-    ResultResponse addProductByInvoiceId(Long invoiceId);
+    void addProductByInvoiceId(Long invoiceId);
 
     CheckResponse addProductToCheck(OperationDto operationDto);
 

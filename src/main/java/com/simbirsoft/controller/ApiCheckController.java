@@ -3,6 +3,7 @@ package com.simbirsoft.controller;
 import com.simbirsoft.api.dto.CheckDto;
 import com.simbirsoft.api.response.ResultResponse;
 import com.simbirsoft.service.CheckService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class ApiCheckController {
     }
 
     @GetMapping
-    public List<CheckDto> getAllChecks() {
+    public ResponseEntity<List<CheckDto>> getAllChecks() {
         return checkService.getAllChecks();
     }
 
@@ -27,7 +28,7 @@ public class ApiCheckController {
     }
 
     @PutMapping
-    public List<CheckDto> updateAllChecks(@RequestBody List<CheckDto> request) {
+    public ResponseEntity<List<CheckDto>> updateAllChecks(@RequestBody List<CheckDto> request) {
         return checkService.updateAllChecks(request);
     }
 
@@ -48,7 +49,7 @@ public class ApiCheckController {
     }
 
     @DeleteMapping("/{id}")
-    public ResultResponse deleteCheckById(@PathVariable("id") Long id) {
-        return checkService.deleteCheckById(id);
+    public void deleteCheckById(@PathVariable("id") Long id) {
+        checkService.deleteCheckById(id);
     }
 }

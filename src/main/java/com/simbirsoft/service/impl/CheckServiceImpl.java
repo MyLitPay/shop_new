@@ -8,6 +8,8 @@ import com.simbirsoft.mapper.CheckMapper;
 import com.simbirsoft.model.Check;
 import com.simbirsoft.repo.CheckRepository;
 import com.simbirsoft.service.CheckService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,10 +25,14 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
-    public List<CheckDto> getAllChecks() {
-        return checkRepository.findAll().stream()
+    public ResponseEntity<List<CheckDto>> getAllChecks() {
+        List<CheckDto> list = checkRepository.findAll().stream()
                 .map(CheckMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
+        if (list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @Override
@@ -37,7 +43,7 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
-    public List<CheckDto> updateAllChecks(List<CheckDto> request) {
+    public ResponseEntity<List<CheckDto>> updateAllChecks(List<CheckDto> request) {
         List<Check> checkList = new ArrayList<>();
 
         for (CheckDto dto : request) {
@@ -73,13 +79,9 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
-    public ResultResponse deleteCheckById(Long id) {
-        try {
-            checkRepository.deleteById(id);
-            return new ResultResponse(ResultResponseType.OK);
-        } catch (Exception ex) {
-            return new ResultResponse(ResultResponseType.ERROR);
-        }
+    public void deleteCheckById(Long id) {
+        findCheckById(id);
+        checkRepository.deleteById(id);
     }
 
     public Check findCheckById(long id) {

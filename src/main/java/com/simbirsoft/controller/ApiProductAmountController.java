@@ -3,6 +3,7 @@ package com.simbirsoft.controller;
 import com.simbirsoft.api.dto.ProductAmountDto;
 import com.simbirsoft.api.response.ResultResponse;
 import com.simbirsoft.service.ProductAmountService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class ApiProductAmountController {
     }
 
     @GetMapping
-    public List<ProductAmountDto> getAllProductAmounts() {
+    public ResponseEntity<List<ProductAmountDto>> getAllProductAmounts() {
         return productAmountService.getAllProductAmounts();
     }
 
@@ -27,7 +28,7 @@ public class ApiProductAmountController {
     }
 
     @PutMapping
-    public List<ProductAmountDto> updateAllProductAmounts(@RequestBody List<ProductAmountDto> request) {
+    public ResponseEntity<List<ProductAmountDto>> updateAllProductAmounts(@RequestBody List<ProductAmountDto> request) {
         return productAmountService.updateAllProductAmounts(request);
     }
 
@@ -48,8 +49,8 @@ public class ApiProductAmountController {
     }
 
     @DeleteMapping("/{id}")
-    public ResultResponse deleteProductAmountById(@PathVariable("id") Long id) {
-        return productAmountService.deleteProductAmountById(id);
+    public void deleteProductAmountById(@PathVariable("id") Long id) {
+        productAmountService.deleteProductAmountById(id);
     }
 
 }

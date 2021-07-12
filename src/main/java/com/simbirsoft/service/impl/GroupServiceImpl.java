@@ -8,6 +8,8 @@ import com.simbirsoft.mapper.GroupMapper;
 import com.simbirsoft.model.Group;
 import com.simbirsoft.repo.GroupRepository;
 import com.simbirsoft.service.GroupService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,10 +25,14 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<GroupDto> getAllGroups() {
-        return groupRepository.findAll().stream()
+    public ResponseEntity<List<GroupDto>> getAllGroups() {
+        List<GroupDto> list = groupRepository.findAll().stream()
                 .map(GroupMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
+        if (list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @Override
@@ -37,7 +43,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<GroupDto> updateAllGroups(List<GroupDto> request) {
+    public ResponseEntity<List<GroupDto>> updateAllGroups(List<GroupDto> request) {
         List<Group> groupList = new ArrayList<>();
 
         for (GroupDto dto : request) {
@@ -73,13 +79,9 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public ResultResponse deleteGroupById(Long id) {
-        try {
+    public void deleteGroupById(Long id) {
+            findGroupById(id);
             groupRepository.deleteById(id);
-            return new ResultResponse(ResultResponseType.OK);
-        } catch (Exception ex) {
-            return new ResultResponse(ResultResponseType.ERROR);
-        }
     }
 
     public Group findGroupById(long id) {

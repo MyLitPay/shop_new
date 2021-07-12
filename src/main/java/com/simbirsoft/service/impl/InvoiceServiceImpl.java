@@ -11,6 +11,8 @@ import com.simbirsoft.model.Invoice;
 import com.simbirsoft.repo.GroupRepository;
 import com.simbirsoft.repo.InvoiceRepository;
 import com.simbirsoft.service.InvoiceService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,10 +30,14 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public List<InvoiceDto> getAllInvoices() {
-        return invoiceRepository.findAll().stream()
+    public ResponseEntity<List<InvoiceDto>> getAllInvoices() {
+        List<InvoiceDto> list = invoiceRepository.findAll().stream()
                 .map(InvoiceMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
+        if (list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @Override
@@ -42,7 +48,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public List<InvoiceDto> updateAllInvoices(List<InvoiceDto> request) {
+    public ResponseEntity<List<InvoiceDto>> updateAllInvoices(List<InvoiceDto> request) {
         List<Invoice> invoiceList = new ArrayList<>();
 
         for (InvoiceDto invoiceDto : request) {
@@ -81,15 +87,9 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public ResultResponse deleteInvoiceById(Long id) {
-        try {
-            deleteConstraints(invoiceRepository.findById(id)
-                    .orElseThrow(() -> new InvoiceNotFoundException("Invoice not found")));
+    public void deleteInvoiceById(Long id) {
+            deleteConstraints(findInvoiceById(id));
             invoiceRepository.deleteById(id);
-            return new ResultResponse(ResultResponseType.OK);
-        } catch (Exception ex) {
-            return new ResultResponse(ResultResponseType.ERROR);
-        }
     }
 
     public Invoice findInvoiceById(long id) {
@@ -110,6 +110,9 @@ public class InvoiceServiceImpl implements InvoiceService {
         if (dto.getGroupId() != null) {
             Group group = getGroupFromDB(dto.getGroupId());
             invoice.setGroup(group);
+            if (group.getInvoices() == null) {
+                group.setInvoices(new ArrayList<>());
+            }
             group.getInvoices().add(invoice);
         }
         return invoice;

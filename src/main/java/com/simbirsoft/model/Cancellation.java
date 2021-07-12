@@ -27,5 +27,5 @@ public class Cancellation {
     @OneToMany(mappedBy = "cancellation",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<Operation> operations = new ArrayList<>();
+    private List<Operation> operations;
 }

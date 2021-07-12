@@ -20,8 +20,6 @@ public class Operation {
     @Enumerated(EnumType.STRING)
     private OperationType operation;
 
-    //    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "prod_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
                     CascadeType.PERSIST, CascadeType.REFRESH})

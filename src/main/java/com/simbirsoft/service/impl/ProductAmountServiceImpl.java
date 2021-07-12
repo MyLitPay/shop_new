@@ -11,6 +11,8 @@ import com.simbirsoft.model.ProductAmount;
 import com.simbirsoft.repo.ProductAmountRepository;
 import com.simbirsoft.repo.ProductRepository;
 import com.simbirsoft.service.ProductAmountService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,10 +30,14 @@ public class ProductAmountServiceImpl implements ProductAmountService {
     }
 
     @Override
-    public List<ProductAmountDto> getAllProductAmounts() {
-        return productAmountRepository.findAll().stream()
+    public ResponseEntity<List<ProductAmountDto>> getAllProductAmounts() {
+        List<ProductAmountDto> list = productAmountRepository.findAll().stream()
                 .map(ProductAmountMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
+        if (list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @Override
@@ -43,7 +49,7 @@ public class ProductAmountServiceImpl implements ProductAmountService {
     }
 
     @Override
-    public List<ProductAmountDto> updateAllProductAmounts(List<ProductAmountDto> request) {
+    public ResponseEntity<List<ProductAmountDto>> updateAllProductAmounts(List<ProductAmountDto> request) {
         List<ProductAmount> productAmountList = new ArrayList<>();
 
         for (ProductAmountDto dto : request) {
@@ -85,15 +91,9 @@ public class ProductAmountServiceImpl implements ProductAmountService {
     }
 
     @Override
-    public ResultResponse deleteProductAmountById(Long id) {
-        try {
-            deleteConstraints(productAmountRepository.findById(id)
-                    .orElseThrow(() -> new ProductAmountNotFoundException("ProductAmount not found")));
+    public void deleteProductAmountById(Long id) {
+            deleteConstraints(findProductAmountById(id));
             productAmountRepository.deleteById(id);
-            return new ResultResponse(ResultResponseType.OK);
-        } catch (Exception ex) {
-            return new ResultResponse(ResultResponseType.ERROR);
-        }
     }
 
     public ProductAmount findProductAmountById(long id) {
@@ -114,7 +114,6 @@ public class ProductAmountServiceImpl implements ProductAmountService {
     private ProductAmount setConstraints(ProductAmountDto dto, ProductAmount amount) {
         if (dto.getProdId() != null) {
             Product product = getProductFromDB(dto.getProdId());
-//            product.setProductAmount(amount);
             amount.setProduct(product);
         }
         return amount;
@@ -123,7 +122,6 @@ public class ProductAmountServiceImpl implements ProductAmountService {
     private void deleteConstraints(ProductAmount amount) {
         if (amount.getProduct() != null) {
             Product product = getProductFromDB(amount.getProduct().getId());
-//            product.setProductAmount(new ProductAmount());
         }
     }
 

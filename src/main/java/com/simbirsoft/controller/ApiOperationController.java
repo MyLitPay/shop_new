@@ -3,6 +3,7 @@ package com.simbirsoft.controller;
 import com.simbirsoft.api.dto.OperationDto;
 import com.simbirsoft.api.response.ResultResponse;
 import com.simbirsoft.service.OperationService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class ApiOperationController {
     }
 
     @GetMapping
-    public List<OperationDto> getAllOperations() {
+    public ResponseEntity<List<OperationDto>> getAllOperations() {
         return operationService.getAllOperations();
     }
 
@@ -27,7 +28,7 @@ public class ApiOperationController {
     }
 
     @PutMapping
-    public List<OperationDto> updateAllOperations(@RequestBody List<OperationDto> request) {
+    public ResponseEntity<List<OperationDto>> updateAllOperations(@RequestBody List<OperationDto> request) {
         return operationService.updateAllOperations(request);
     }
 
@@ -48,7 +49,7 @@ public class ApiOperationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResultResponse deleteOperationById(@PathVariable("id") Long id) {
-        return operationService.deleteOperationById(id);
+    public void deleteOperationById(@PathVariable("id") Long id) {
+        operationService.deleteOperationById(id);
     }
 }
