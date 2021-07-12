@@ -42,7 +42,7 @@ public class OperationServiceImpl implements OperationService {
             operations.add(dto);
         }
         if (operations.isEmpty()) {
-            throw new CancellationNotFoundException("Operations not found");
+            throw new OperationNotFoundException();
         }
         return operations;
     }
@@ -116,7 +116,7 @@ public class OperationServiceImpl implements OperationService {
 
     public Operation findOperationById(long id) {
         return operationRepository.findById(id)
-                .orElseThrow(() -> new OperationNotFoundException("Operation not found"));
+                .orElseThrow(OperationNotFoundException::new);
     }
 
     private Operation updateOperationData(Operation operation, OperationDto dto) {
@@ -188,16 +188,16 @@ public class OperationServiceImpl implements OperationService {
 
     private Product getProductFromDB(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+                .orElseThrow(ProductNotFoundException::new);
     }
 
     private Check getCheckFromDB(Long id) {
         return checkRepository.findById(id)
-                .orElseThrow(() -> new CheckNotFoundException("Check not found"));
+                .orElseThrow(CheckNotFoundException::new);
     }
 
     private Cancellation getCancellationFromDB(Long id) {
         return cancellationRepository.findById(id)
-                .orElseThrow(() -> new CancellationNotFoundException("Cancellation not found"));
+                .orElseThrow(CancellationNotFoundException::new);
     }
 }

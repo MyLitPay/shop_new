@@ -31,7 +31,7 @@ public class GroupServiceImpl implements GroupService {
                 .map(GroupMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
         if (list.isEmpty()) {
-            throw new CancellationNotFoundException("Groups not found");
+            throw new GroupNotFoundException();
         }
         return list;
     }
@@ -87,7 +87,7 @@ public class GroupServiceImpl implements GroupService {
 
     public Group findGroupById(long id) {
         return groupRepository.findById(id)
-                .orElseThrow(() -> new GroupNotFoundException("Group not found"));
+                .orElseThrow(GroupNotFoundException::new);
     }
 
     private Group updateGroupData(Group group, GroupDto dto) {

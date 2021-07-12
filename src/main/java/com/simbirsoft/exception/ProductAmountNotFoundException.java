@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.OK, reason = "Amount not found")
 public class ProductAmountNotFoundException extends RuntimeException {
-    public ProductAmountNotFoundException(String message) {
-        super(message);
+    private static final String MESSAGE = "Product amounts not found";
+
+    public ProductAmountNotFoundException() {
+        super(MESSAGE);
     }
 }

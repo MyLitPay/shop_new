@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.OK, reason = "Invoice not found")
 public class InvoiceNotFoundException extends RuntimeException {
-    public InvoiceNotFoundException(String message) {
-        super(message);
+    private static final String MESSAGE = "Invoices not found";
+
+    public InvoiceNotFoundException() {
+        super(MESSAGE);
     }
 }

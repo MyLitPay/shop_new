@@ -31,7 +31,7 @@ public class CancellationServiceImpl implements CancellationService {
                 .map(CancellationMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
         if (list.isEmpty()) {
-            throw new CancellationNotFoundException("Cancellations not found");
+            throw new CancellationNotFoundException();
         }
         return list;
     }
@@ -87,7 +87,7 @@ public class CancellationServiceImpl implements CancellationService {
 
     public Cancellation findCancellationById(long id) {
         return cancellationRepository.findById(id)
-                .orElseThrow(() -> new CancellationNotFoundException("Cancellation not found"));
+                .orElseThrow(CancellationNotFoundException::new);
     }
 
     private Cancellation updateCancellationData(Cancellation cancellation, CancellationDto dto) {

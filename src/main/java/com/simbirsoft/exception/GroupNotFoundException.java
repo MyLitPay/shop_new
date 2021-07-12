@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.OK, reason = "Group not found")
 public class GroupNotFoundException extends RuntimeException {
-    public GroupNotFoundException(String message) {
-        super(message);
+    private static final String MESSAGE = "Groups not found";
+
+    public GroupNotFoundException() {
+        super(MESSAGE);
     }
 }

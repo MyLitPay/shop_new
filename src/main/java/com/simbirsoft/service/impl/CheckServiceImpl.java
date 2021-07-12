@@ -31,7 +31,7 @@ public class CheckServiceImpl implements CheckService {
                 .map(CheckMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
         if (list.isEmpty()) {
-            throw new CancellationNotFoundException("Checks not found");
+            throw new CheckNotFoundException();
         }
         return list;
     }
@@ -87,7 +87,7 @@ public class CheckServiceImpl implements CheckService {
 
     public Check findCheckById(long id) {
         return checkRepository.findById(id)
-                .orElseThrow(() -> new CheckNotFoundException("Check not found"));
+                .orElseThrow(CheckNotFoundException::new);
     }
 
     private Check updateCheckData(Check check, CheckDto dto) {

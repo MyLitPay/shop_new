@@ -36,7 +36,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .map(InvoiceMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
         if (list.isEmpty()) {
-            throw new CancellationNotFoundException("Invoices not found");
+            throw new InvoiceNotFoundException();
         }
         return list;
     }
@@ -95,7 +95,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     public Invoice findInvoiceById(long id) {
         return invoiceRepository.findById(id)
-                .orElseThrow(() -> new InvoiceNotFoundException("Invoice not found"));
+                .orElseThrow(InvoiceNotFoundException::new);
     }
 
     private Invoice updateInvoiceData(Invoice invoice, InvoiceDto invoiceDto) {
@@ -128,7 +128,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     private Group getGroupFromDB(Long id) {
         return groupRepository.findById(id)
-                .orElseThrow(() -> new GroupNotFoundException("Group not found"));
+                .orElseThrow(GroupNotFoundException::new);
     }
 
 }

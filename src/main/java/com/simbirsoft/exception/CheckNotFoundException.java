@@ -5,7 +5,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.OK, reason = "Check not found")
 public class CheckNotFoundException extends RuntimeException {
-    public CheckNotFoundException(String message) {
-        super(message);
+    private static final String MESSAGE = "Checks not found";
+    public CheckNotFoundException() {
+        super(MESSAGE);
     }
 }
