@@ -13,11 +13,10 @@ import javax.persistence.*;
 public class ProductAmount {
 
     @Id
-    @Column(name = "prod_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
     @JoinColumn(name = "prod_id")
     private Product product;
 

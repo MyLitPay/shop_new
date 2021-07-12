@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "products")
@@ -26,10 +29,25 @@ public class Product {
     @JoinColumn(name = "group_id")
     private Group group;
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private ProductAmount productAmount;
+//    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+//    private ProductAmount productAmount;
 
-    @OneToOne(mappedBy = "product")
-    private Operation operation;
+//    @OneToOne(mappedBy = "product")
+    @OneToMany(mappedBy = "product",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Operation> operations = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id) && Objects.equals(name, product.name) && Objects.equals(price, product.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, price);
+    }
 }
