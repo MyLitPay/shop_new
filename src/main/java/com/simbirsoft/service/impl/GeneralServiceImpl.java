@@ -4,7 +4,6 @@ import com.simbirsoft.api.dto.*;
 import com.simbirsoft.api.response.*;
 import com.simbirsoft.mapper.CheckMapper;
 import com.simbirsoft.mapper.InvoiceDtoToProductDtoMapper;
-import com.simbirsoft.mapper.ProductAmountMapper;
 import com.simbirsoft.mapper.ProductToProductForCheckDtoMapper;
 import com.simbirsoft.model.*;
 import com.simbirsoft.api.response.*;

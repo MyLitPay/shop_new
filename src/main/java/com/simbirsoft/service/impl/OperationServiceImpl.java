@@ -71,14 +71,15 @@ public class OperationServiceImpl implements OperationService {
 
     @Override
     public void deleteAllOperations() {
-            List<Operation> operations = operationRepository.findAll();
-            for (Operation operation : operations) {
-                deleteConstraints(operation);
-            }
-            operationRepository.deleteAll(operations);
+        List<Operation> operations = operationRepository.findAll();
         if (operations.isEmpty()) {
             throw new OperationNotFoundException();
         }
+
+        for (Operation operation : operations) {
+            deleteConstraints(operation);
+        }
+        operationRepository.deleteAll(operations);
     }
 
     @Override
@@ -105,8 +106,8 @@ public class OperationServiceImpl implements OperationService {
 
     @Override
     public void deleteOperationById(Long id) {
-            deleteConstraints(findOperationById(id));
-            operationRepository.deleteById(id);
+        deleteConstraints(findOperationById(id));
+        operationRepository.deleteById(id);
     }
 
     public Operation findOperationById(long id) {
@@ -140,11 +141,14 @@ public class OperationServiceImpl implements OperationService {
     private OperationType stringToEnum(String typeName) {
         OperationType type;
         switch (typeName) {
-            case "SELLING" : type = OperationType.SELLING;
+            case "SELLING":
+                type = OperationType.SELLING;
                 break;
-            case "RESCUE" : type = OperationType.RESCUE;
+            case "RESCUE":
+                type = OperationType.RESCUE;
                 break;
-            default: type = OperationType.NOT_DEFINE;
+            default:
+                type = OperationType.NOT_DEFINE;
                 break;
         }
         return type;

@@ -63,13 +63,14 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public void deleteAllInvoices() {
         List<Invoice> invoices = invoiceRepository.findAll();
+        if (invoices.isEmpty()) {
+            throw new InvoiceNotFoundException();
+        }
+
         for (Invoice invoice : invoices) {
             deleteConstraints(invoice);
         }
         invoiceRepository.deleteAll(invoices);
-        if (invoices.isEmpty()) {
-            throw new InvoiceNotFoundException();
-        }
     }
 
     @Override

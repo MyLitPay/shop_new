@@ -37,6 +37,7 @@ public class ProductServiceImpl implements ProductService {
         List<ProductDto> list = productRepository.findAll().stream()
                 .map(ProductMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
+
         if (list.isEmpty()) {
             throw new ProductNotFoundException();
         }
