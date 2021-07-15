@@ -34,8 +34,8 @@ public class ApiGroupController {
     }
 
     @DeleteMapping
-    public ResultResponse deleteAllGroups() {
-        return groupService.deleteAllGroups();
+    public void deleteAllGroups() {
+        groupService.deleteAllGroups();
     }
 
     @GetMapping("/{id}")

@@ -184,3 +184,13 @@ databaseChangeLog:
                     references: groups(id)
                   name: group_id
                   type: int8
+  - changeSet:
+      id: add-column-checks
+      author: mike
+      changes:
+        - addColumn:
+            tableName: checks
+            columns:
+              - column:
+                  name: closed
+                  type: bool

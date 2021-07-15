@@ -4,6 +4,7 @@ import com.simbirsoft.api.dto.CancellationDto;
 import com.simbirsoft.api.response.ResultResponse;
 import com.simbirsoft.api.response.ResultResponseType;
 import com.simbirsoft.exception.CancellationNotFoundException;
+import com.simbirsoft.exception.CheckNotFoundException;
 import com.simbirsoft.exception.OperationNotFoundException;
 import com.simbirsoft.mapper.CancellationMapper;
 import com.simbirsoft.model.Cancellation;
@@ -56,14 +57,12 @@ public class CancellationServiceImpl implements CancellationService {
     }
 
     @Override
-    public ResultResponse deleteAllCancellations() {
-        try {
+    public void deleteAllCancellations() {
             List<Cancellation> cancellations = cancellationRepository.findAll();
             cancellationRepository.deleteAll(cancellations);
-            return new ResultResponse(ResultResponseType.OK);
-        } catch (Exception ex) {
-            return new ResultResponse(ResultResponseType.ERROR);
-        }
+            if (cancellations.isEmpty()) {
+                throw new CancellationNotFoundException();
+            }
     }
 
     @Override

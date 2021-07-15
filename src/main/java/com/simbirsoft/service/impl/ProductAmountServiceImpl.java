@@ -4,6 +4,7 @@ import com.simbirsoft.api.dto.ProductAmountDto;
 import com.simbirsoft.api.response.ResultResponse;
 import com.simbirsoft.api.response.ResultResponseType;
 import com.simbirsoft.exception.CancellationNotFoundException;
+import com.simbirsoft.exception.CheckNotFoundException;
 import com.simbirsoft.exception.ProductAmountNotFoundException;
 import com.simbirsoft.exception.ProductNotFoundException;
 import com.simbirsoft.mapper.ProductAmountMapper;
@@ -36,7 +37,7 @@ public class ProductAmountServiceImpl implements ProductAmountService {
                 .map(ProductAmountMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
         if (list.isEmpty()) {
-            throw new CancellationNotFoundException("Product amounts not found");
+            throw new ProductAmountNotFoundException();
         }
         return list;
     }
@@ -62,16 +63,14 @@ public class ProductAmountServiceImpl implements ProductAmountService {
     }
 
     @Override
-    public ResultResponse deleteAllProductAmounts() {
-        try {
+    public void deleteAllProductAmounts() {
             List<ProductAmount> productAmounts = productAmountRepository.findAll();
             for (ProductAmount amounts : productAmounts) {
                 deleteConstraints(amounts);
             }
             productAmountRepository.deleteAll(productAmounts);
-            return new ResultResponse(ResultResponseType.OK);
-        } catch (Exception ex) {
-            return new ResultResponse(ResultResponseType.ERROR);
+        if (productAmounts.isEmpty()) {
+            throw new ProductAmountNotFoundException();
         }
     }
 
@@ -99,12 +98,12 @@ public class ProductAmountServiceImpl implements ProductAmountService {
 
     public ProductAmount findProductAmountById(long id) {
         return productAmountRepository.findById(id)
-                .orElseThrow(() -> new ProductAmountNotFoundException("ProductAmount not found"));
+                .orElseThrow(ProductAmountNotFoundException::new);
     }
 
     public ProductAmount findByProduct(Product product) {
         return productAmountRepository.findByProduct(product)
-                .orElseThrow(() -> new ProductAmountNotFoundException("Amount not found"));
+                .orElseThrow(ProductAmountNotFoundException::new);
     }
 
     private ProductAmount updateProductAmountData(ProductAmount productAmount, ProductAmountDto dto) {
@@ -128,6 +127,6 @@ public class ProductAmountServiceImpl implements ProductAmountService {
 
     private Product getProductFromDB(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+                .orElseThrow(ProductNotFoundException::new);
     }
 }

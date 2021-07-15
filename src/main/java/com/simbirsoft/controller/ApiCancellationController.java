@@ -33,8 +33,8 @@ public class ApiCancellationController {
     }
 
     @DeleteMapping
-    public ResultResponse deleteAllCancellations() {
-        return cancellationService.deleteAllCancellations();
+    public void deleteAllCancellations() {
+        cancellationService.deleteAllCancellations();
     }
 
     @GetMapping("/{id}")
@@ -44,7 +44,7 @@ public class ApiCancellationController {
 
     @PutMapping("/{id}")
     public CancellationDto updateCancellationById(@PathVariable("id") Long id,
-                                    @RequestBody CancellationDto dto) {
+                                                  @RequestBody CancellationDto dto) {
         return cancellationService.updateCancellationById(id, dto);
     }
 

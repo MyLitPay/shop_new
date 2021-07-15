@@ -4,6 +4,7 @@ import com.simbirsoft.api.dto.ProductDto;
 import com.simbirsoft.api.response.ResultResponse;
 import com.simbirsoft.api.response.ResultResponseType;
 import com.simbirsoft.exception.CancellationNotFoundException;
+import com.simbirsoft.exception.CheckNotFoundException;
 import com.simbirsoft.exception.GroupNotFoundException;
 import com.simbirsoft.exception.ProductNotFoundException;
 import com.simbirsoft.mapper.ProductMapper;
@@ -37,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
                 .map(ProductMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
         if (list.isEmpty()) {
-            throw new CancellationNotFoundException("Products not found");
+            throw new ProductNotFoundException();
         }
         return list;
     }
@@ -62,16 +63,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResultResponse deleteAllProducts() {
-        try {
+    public void deleteAllProducts() {
             List<Product> products = productRepository.findAll();
             for (Product product : products) {
                 deleteConstraints(product);
             }
             productRepository.deleteAll(products);
-            return new ResultResponse(ResultResponseType.OK);
-        } catch (Exception ex) {
-            return new ResultResponse(ResultResponseType.ERROR);
+        if (products.isEmpty()) {
+            throw new ProductNotFoundException();
         }
     }
 
@@ -96,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
 
     public Product findProductById(long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+                .orElseThrow(ProductNotFoundException::new);
     }
 
     public Product findByNameAndPrice(String name, Double price) {
@@ -131,6 +130,6 @@ public class ProductServiceImpl implements ProductService {
 
     private Group getGroupFromDB(Long id) {
         return groupRepository.findById(id)
-                .orElseThrow(() -> new GroupNotFoundException("Group not found"));
+                .orElseThrow(GroupNotFoundException::new);
     }
 }

@@ -11,7 +11,7 @@ public interface InvoiceService {
     List<InvoiceDto> getAllInvoices();
     InvoiceDto addInvoice(InvoiceDto invoiceDto);
     List<InvoiceDto> updateAllInvoices(List<InvoiceDto> request);
-    ResultResponse deleteAllInvoices();
+    void deleteAllInvoices();
     InvoiceDto getInvoiceById(Long id);
     InvoiceDto updateInvoiceById(Long id, InvoiceDto invoiceDto);
     void deleteInvoiceById(Long id);

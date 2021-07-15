@@ -71,16 +71,14 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public ResultResponse deleteAllOperations() {
-        try {
+    public void deleteAllOperations() {
             List<Operation> operations = operationRepository.findAll();
             for (Operation operation : operations) {
                 deleteConstraints(operation);
             }
             operationRepository.deleteAll(operations);
-            return new ResultResponse(ResultResponseType.OK);
-        } catch (Exception ex) {
-            return new ResultResponse(ResultResponseType.ERROR);
+        if (operations.isEmpty()) {
+            throw new OperationNotFoundException();
         }
     }
 
@@ -117,6 +115,22 @@ public class OperationServiceImpl implements OperationService {
     public Operation findOperationById(long id) {
         return operationRepository.findById(id)
                 .orElseThrow(OperationNotFoundException::new);
+    }
+
+    public List<Operation> findOperationListByCheck(Check check) {
+        List<Operation> operationList = operationRepository.findByCheck(check);
+        if (operationList.isEmpty()) {
+            throw new OperationNotFoundException();
+        }
+        return operationList;
+    }
+
+    public Integer findAmountOfProductByCheckAndProduct(Check check, Product product) {
+        Integer amount = operationRepository.findAmountOfProductByCheckAndProduct(check, product);
+        if (amount == null) {
+            throw new OperationNotFoundException();
+        }
+        return amount;
     }
 
     private Operation updateOperationData(Operation operation, OperationDto dto) {

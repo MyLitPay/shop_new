@@ -33,8 +33,8 @@ public class ApiOperationController {
     }
 
     @DeleteMapping
-    public ResultResponse deleteAllOperations() {
-        return operationService.deleteAllOperations();
+    public void deleteAllOperations() {
+        operationService.deleteAllOperations();
     }
 
     @GetMapping("/{id}")

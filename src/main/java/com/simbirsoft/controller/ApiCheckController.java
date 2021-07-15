@@ -33,8 +33,8 @@ public class ApiCheckController {
     }
 
     @DeleteMapping
-    public ResultResponse deleteAllChecks() {
-        return checkService.deleteAllChecks();
+    public void deleteAllChecks() {
+        checkService.deleteAllChecks();
     }
 
     @GetMapping("/{id}")

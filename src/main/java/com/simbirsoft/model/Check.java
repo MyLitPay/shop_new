@@ -22,6 +22,8 @@ public class Check {
 
     private String description;
 
+    private Boolean closed;
+
     @OneToMany(mappedBy = "check",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
@@ -31,4 +33,16 @@ public class Check {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
+
+    public Check(Long id) {
+        this.id = id;
+    }
+
+    public Check(Long id, String description, Boolean closed, Double totalSum, Date date) {
+        this.id = id;
+        this.description = description;
+        this.closed = closed;
+        this.totalSum = totalSum;
+        this.date = date;
+    }
 }

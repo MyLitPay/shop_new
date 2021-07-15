@@ -33,8 +33,8 @@ public class ApiProductAmountController {
     }
 
     @DeleteMapping
-    public ResultResponse deleteAllProductAmounts() {
-        return productAmountService.deleteAllProductAmounts();
+    public void deleteAllProductAmounts() {
+        productAmountService.deleteAllProductAmounts();
     }
 
     @GetMapping("/{id}")

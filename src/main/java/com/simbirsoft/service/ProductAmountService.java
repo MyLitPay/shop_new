@@ -12,7 +12,7 @@ public interface ProductAmountService {
     List<ProductAmountDto> getAllProductAmounts();
     ProductAmountDto addProductAmount(ProductAmountDto dto);
     List<ProductAmountDto> updateAllProductAmounts(List<ProductAmountDto> request);
-    ResultResponse deleteAllProductAmounts();
+    void deleteAllProductAmounts();
     ProductAmountDto getProductAmountById(Long id);
     ProductAmountDto updateProductAmountById(Long id, ProductAmountDto dto);
     void deleteProductAmountById(Long id);

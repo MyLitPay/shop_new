@@ -11,7 +11,7 @@ public interface CancellationService {
     List<CancellationDto> getAllCancellations();
     CancellationDto addCancellation(CancellationDto dto);
     List<CancellationDto> updateAllCancellations(List<CancellationDto> request);
-    ResultResponse deleteAllCancellations();
+    void deleteAllCancellations();
     CancellationDto getCancellationById(Long id);
     CancellationDto updateCancellationById(Long id, CancellationDto dto);
     void deleteCancellationById(Long id);
