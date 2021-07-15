@@ -11,7 +11,7 @@ public interface GroupService {
     List<GroupDto> getAllGroups();
     GroupDto addGroup(GroupDto dto);
     List<GroupDto> updateAllGroups(List<GroupDto> request);
-    ResultResponse deleteAllGroups();
+    void deleteAllGroups();
     GroupDto getGroupById(Long id);
     GroupDto updateGroupById(Long id, GroupDto dto);
     void deleteGroupById(Long id);

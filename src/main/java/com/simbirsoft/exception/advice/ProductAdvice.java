@@ -22,7 +22,7 @@ public class ProductAdvice {
     @ExceptionHandler({CancellationNotFoundException.class, CheckNotFoundException.class,
             GroupNotFoundException.class, InvoiceNotFoundException.class,
     OperationNotFoundException.class, ProductAmountNotFoundException.class,
-    ProductNotFoundException.class})
+    ProductNotFoundException.class, ClosedCheckException.class, IncorrectDateException.class})
     public ResponseEntity<ResultResponse> handleException(RuntimeException ex) {
         ResultResponse resultResponse = new ResultResponse(ex.getMessage());
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);

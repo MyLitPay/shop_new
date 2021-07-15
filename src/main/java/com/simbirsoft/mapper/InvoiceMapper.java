@@ -4,6 +4,7 @@ import com.simbirsoft.api.dto.InvoiceDto;
 import com.simbirsoft.model.Invoice;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 @Mapper

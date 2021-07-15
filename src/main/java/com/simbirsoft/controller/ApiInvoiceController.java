@@ -33,8 +33,8 @@ public class ApiInvoiceController {
     }
 
     @DeleteMapping
-    public ResultResponse deleteAllInvoices() {
-        return invoiceService.deleteAllInvoices();
+    public void deleteAllInvoices() {
+        invoiceService.deleteAllInvoices();
     }
 
     @GetMapping("/{id}")

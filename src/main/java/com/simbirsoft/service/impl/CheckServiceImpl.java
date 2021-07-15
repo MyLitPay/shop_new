@@ -5,15 +5,24 @@ import com.simbirsoft.api.response.ResultResponse;
 import com.simbirsoft.api.response.ResultResponseType;
 import com.simbirsoft.exception.CancellationNotFoundException;
 import com.simbirsoft.exception.CheckNotFoundException;
+import com.simbirsoft.exception.IncorrectDateException;
 import com.simbirsoft.mapper.CheckMapper;
 import com.simbirsoft.model.Check;
+import com.simbirsoft.model.OperationType;
 import com.simbirsoft.repo.CheckRepository;
 import com.simbirsoft.service.CheckService;
+import liquibase.pro.packaged.D;
+import org.springframework.format.datetime.joda.LocalDateParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,6 +48,7 @@ public class CheckServiceImpl implements CheckService {
     @Override
     public CheckDto addCheck(CheckDto dto) {
         Check check = CheckMapper.INSTANCE.toEntity(dto);
+        check.setClosed(false);
         Check checkFromDB = checkRepository.saveAndFlush(check);
         return CheckMapper.INSTANCE.toDTO(checkFromDB);
     }
@@ -56,13 +66,11 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
-    public ResultResponse deleteAllChecks() {
-        try {
-            List<Check> checks = checkRepository.findAll();
-            checkRepository.deleteAll(checks);
-            return new ResultResponse(ResultResponseType.OK);
-        } catch (Exception ex) {
-            return new ResultResponse(ResultResponseType.ERROR);
+    public void deleteAllChecks() {
+        List<Check> checks = checkRepository.findAll();
+        checkRepository.deleteAll(checks);
+        if (checks.isEmpty()) {
+            throw new CheckNotFoundException();
         }
     }
 
@@ -85,15 +93,40 @@ public class CheckServiceImpl implements CheckService {
         checkRepository.deleteById(id);
     }
 
+    @Override
     public Check findCheckById(long id) {
         return checkRepository.findById(id)
                 .orElseThrow(CheckNotFoundException::new);
+    }
+
+    @Override
+    public List<Check> findClosedChecks(OperationType operationType) {
+        String type = operationType.name();
+        List<Check> checkList = checkRepository.findClosedChecks(type);
+        if (checkList == null || checkList.isEmpty()) {
+            throw new CheckNotFoundException();
+        }
+        return checkList;
+    }
+
+    @Override
+    public List<Check> findClosedChecksByDateBetween(OperationType operationType,
+                                                     String dateFrom, String dateTo) {
+        String type = operationType.name();
+        LocalDate from = LocalDate.parse(dateFrom);
+        LocalDate to = LocalDate.parse(dateTo);
+        List<Check> checkList = checkRepository.findClosedChecksByDateBetween(type, from, to);
+        if (checkList == null || checkList.isEmpty()) {
+            throw new CheckNotFoundException();
+        }
+        return checkList;
     }
 
     private Check updateCheckData(Check check, CheckDto dto) {
         check.setDescription(dto.getDescription());
         check.setTotalSum(dto.getTotalSum());
         check.setDate(dto.getDate());
+        check.setClosed(dto.getClosed());
         return check;
     }
 }

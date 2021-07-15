@@ -12,4 +12,5 @@ public class CheckDto {
     private String description;
     private Double totalSum;
     private Date date;
+    private Boolean closed;
 }

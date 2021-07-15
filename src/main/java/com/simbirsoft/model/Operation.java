@@ -36,11 +36,4 @@ public class Operation {
                     CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "check_id")
     private Check check;
-
-    @ManyToOne(fetch = FetchType.LAZY,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE,
-                    CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "cancellation_id")
-    private Cancellation cancellation;
-
 }
