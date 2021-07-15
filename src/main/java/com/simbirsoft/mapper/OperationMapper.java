@@ -14,16 +14,9 @@ public interface OperationMapper {
 
     @Mappings({
             @Mapping(target = "prodId", expression = "java(operation.getProduct().getId())"),
-            @Mapping(target = "checkId", expression = "java(operation.getCheck().getId())"),
-            @Mapping(target = "cancellationId", expression = "java(operation.getCancellation().getId())")
-//            @Mapping(target = "operation", source = "operation", qualifiedByName = "enumToString")
+            @Mapping(target = "checkId", expression = "java(operation.getCheck().getId())")
     })
     OperationDto toDTO(Operation operation);
 
     Operation toEntity(OperationDto dto);
-
-//    @Named("enumToString")
-//    static String enumToString(Operation operation) {
-//        return operation.getOperation().name();
-//    }
 }

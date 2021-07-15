@@ -1,6 +1,7 @@
 package com.simbirsoft.service;
 
 import com.simbirsoft.api.dto.OperationDto;
+import com.simbirsoft.api.dto.ProductForCheckDto;
 import com.simbirsoft.api.response.ProductsReport;
 import com.simbirsoft.api.response.CancellationResponse;
 import com.simbirsoft.api.response.CheckResponse;
@@ -26,4 +27,6 @@ public interface GeneralService {
     Map<String, Double> getAVGCheckReport();
 
     Map<String, Double> getProceeds();
+
+    CheckResponse removeProductFromCheck(OperationDto operationDto);
 }

@@ -12,6 +12,7 @@ import com.simbirsoft.model.OperationType;
 import com.simbirsoft.repo.CheckRepository;
 import com.simbirsoft.service.CheckService;
 import liquibase.pro.packaged.D;
+import org.springframework.format.datetime.joda.LocalDateParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,6 +48,7 @@ public class CheckServiceImpl implements CheckService {
     @Override
     public CheckDto addCheck(CheckDto dto) {
         Check check = CheckMapper.INSTANCE.toEntity(dto);
+        check.setClosed(false);
         Check checkFromDB = checkRepository.saveAndFlush(check);
         return CheckMapper.INSTANCE.toDTO(checkFromDB);
     }
@@ -109,19 +112,14 @@ public class CheckServiceImpl implements CheckService {
     @Override
     public List<Check> findClosedChecksByDateBetween(OperationType operationType,
                                                      String dateFrom, String dateTo) {
-        try {
-            String type = operationType.name();
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date from = df.parse(dateFrom);
-            Date to = df.parse(dateTo);
-            List<Check> checkList = checkRepository.findClosedChecksByDateBetween(type, from, to);
-            if (checkList == null || checkList.isEmpty()) {
-                throw new CheckNotFoundException();
-            }
-            return checkList;
-        } catch (ParseException ex) {
-            throw new IncorrectDateException();
+        String type = operationType.name();
+        LocalDate from = LocalDate.parse(dateFrom);
+        LocalDate to = LocalDate.parse(dateTo);
+        List<Check> checkList = checkRepository.findClosedChecksByDateBetween(type, from, to);
+        if (checkList == null || checkList.isEmpty()) {
+            throw new CheckNotFoundException();
         }
+        return checkList;
     }
 
     private Check updateCheckData(Check check, CheckDto dto) {

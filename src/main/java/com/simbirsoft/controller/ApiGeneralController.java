@@ -1,9 +1,9 @@
 package com.simbirsoft.controller;
 
 import com.simbirsoft.api.dto.OperationDto;
-import com.simbirsoft.api.response.ProductsReport;
 import com.simbirsoft.api.response.CancellationResponse;
 import com.simbirsoft.api.response.CheckResponse;
+import com.simbirsoft.api.response.ProductsReport;
 import com.simbirsoft.api.response.ResultResponse;
 import com.simbirsoft.service.GeneralService;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +29,11 @@ public class ApiGeneralController {
         return generalService.addProductToCheck(operationDto);
     }
 
+    @PostMapping("check/remove")
+    public CheckResponse removeProductFromCheck(@RequestBody OperationDto operationDto) {
+        return generalService.removeProductFromCheck(operationDto);
+    }
+
     @PostMapping("check/close")
     public ResultResponse closeCheck(@RequestBody CheckResponse checkResponse) {
         return generalService.closeCheck(checkResponse);
@@ -51,7 +56,7 @@ public class ApiGeneralController {
 
     @PostMapping("/gone")
     public ProductsReport getGoneProductsReport(@RequestParam String dateFrom,
-                                           @RequestParam String dateTo) {
+                                                @RequestParam String dateTo) {
         return generalService.getGoneProductsReport(dateFrom, dateTo);
     }
 

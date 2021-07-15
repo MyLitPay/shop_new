@@ -5,6 +5,7 @@ import com.simbirsoft.model.OperationType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -20,5 +21,5 @@ public interface CheckRepository extends JpaRepository<Check, Long> {
             "WHERE checks.closed = true AND operations.operation = ?1 AND " +
             "(checks.date BETWEEN ?2 AND ?3)",
             nativeQuery = true)
-    List<Check> findClosedChecksByDateBetween(String operation, Date from, Date to);
+    List<Check> findClosedChecksByDateBetween(String operation, LocalDate from, LocalDate to);
 }

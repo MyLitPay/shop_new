@@ -13,7 +13,7 @@ public class ProductForCheckDto {
     private String productName;
     private Double price;
     private String groupName;
-    private Integer amount;
+    private Integer count;
     private Double sum;
 
     public ProductForCheckDto(String productName, Double price) {

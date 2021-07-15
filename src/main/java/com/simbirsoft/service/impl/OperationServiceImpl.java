@@ -1,18 +1,19 @@
 package com.simbirsoft.service.impl;
 
 import com.simbirsoft.api.dto.OperationDto;
-import com.simbirsoft.api.response.ResultResponse;
-import com.simbirsoft.api.response.ResultResponseType;
-import com.simbirsoft.exception.*;
+import com.simbirsoft.exception.CheckNotFoundException;
+import com.simbirsoft.exception.OperationNotFoundException;
+import com.simbirsoft.exception.ProductNotFoundException;
+import com.simbirsoft.exception.ProductNotSetException;
 import com.simbirsoft.mapper.OperationMapper;
-import com.simbirsoft.model.*;
-import com.simbirsoft.repo.CancellationRepository;
+import com.simbirsoft.model.Check;
+import com.simbirsoft.model.Operation;
+import com.simbirsoft.model.OperationType;
+import com.simbirsoft.model.Product;
 import com.simbirsoft.repo.CheckRepository;
 import com.simbirsoft.repo.OperationRepository;
 import com.simbirsoft.repo.ProductRepository;
 import com.simbirsoft.service.OperationService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,13 +24,11 @@ public class OperationServiceImpl implements OperationService {
     final OperationRepository operationRepository;
     final ProductRepository productRepository;
     final CheckRepository checkRepository;
-    final CancellationRepository cancellationRepository;
 
-    public OperationServiceImpl(OperationRepository operationRepository, ProductRepository productRepository, CheckRepository checkRepository, CancellationRepository cancellationRepository) {
+    public OperationServiceImpl(OperationRepository operationRepository, ProductRepository productRepository, CheckRepository checkRepository) {
         this.operationRepository = operationRepository;
         this.productRepository = productRepository;
         this.checkRepository = checkRepository;
-        this.cancellationRepository = cancellationRepository;
     }
 
     @Override
@@ -91,9 +90,7 @@ public class OperationServiceImpl implements OperationService {
         if (operation.getCheck() == null) {
             operation.setCheck(new Check());
         }
-        if (operation.getCancellation() == null) {
-            operation.setCancellation(new Cancellation());
-        }
+
         OperationDto dto = OperationMapper.INSTANCE.toDTO(operation);
         dto.setOperation(operation.getOperation().name());
         return dto;
@@ -134,7 +131,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     private Operation updateOperationData(Operation operation, OperationDto dto) {
-        operation.setAmount(dto.getAmount());
+        operation.setAmount(dto.getCount());
         operation.setSum(dto.getSum());
         operation.setOperation(stringToEnum(dto.getOperation()));
         return setConstraints(dto, operation);
@@ -172,16 +169,7 @@ public class OperationServiceImpl implements OperationService {
         } else {
             operation.setCheck(new Check());
         }
-        if (dto.getCancellationId() != null) {
-            Cancellation cancellation = getCancellationFromDB(dto.getCancellationId());
-            operation.setCancellation(cancellation);
-            if (cancellation.getOperations() == null) {
-                cancellation.setOperations(new ArrayList<>());
-            }
-            cancellation.getOperations().add(operation);
-        } else {
-            operation.setCancellation(new Cancellation());
-        }
+
         return operation;
     }
 
@@ -194,10 +182,6 @@ public class OperationServiceImpl implements OperationService {
             Check check = getCheckFromDB(operation.getCheck().getId());
             check.getOperations().remove(operation);
         }
-        if (operation.getCancellation() != null) {
-            Cancellation cancellation = getCancellationFromDB(operation.getCancellation().getId());
-            cancellation.getOperations().remove(operation);
-        }
     }
 
     private Product getProductFromDB(Long id) {
@@ -208,10 +192,5 @@ public class OperationServiceImpl implements OperationService {
     private Check getCheckFromDB(Long id) {
         return checkRepository.findById(id)
                 .orElseThrow(CheckNotFoundException::new);
-    }
-
-    private Cancellation getCancellationFromDB(Long id) {
-        return cancellationRepository.findById(id)
-                .orElseThrow(CancellationNotFoundException::new);
     }
 }

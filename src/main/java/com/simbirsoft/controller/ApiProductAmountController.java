@@ -1,9 +1,7 @@
 package com.simbirsoft.controller;
 
-import com.simbirsoft.api.dto.ProductAmountDto;
-import com.simbirsoft.api.response.ResultResponse;
-import com.simbirsoft.service.ProductAmountService;
-import org.springframework.http.ResponseEntity;
+import com.simbirsoft.api.dto.ProductCountDto;
+import com.simbirsoft.service.ProductCountService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,46 +9,46 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/amounts")
 public class ApiProductAmountController {
-    final ProductAmountService productAmountService;
+    final ProductCountService productCountService;
 
-    public ApiProductAmountController(ProductAmountService productAmountService) {
-        this.productAmountService = productAmountService;
+    public ApiProductAmountController(ProductCountService productCountService) {
+        this.productCountService = productCountService;
     }
 
     @GetMapping
-    public List<ProductAmountDto> getAllProductAmounts() {
-        return productAmountService.getAllProductAmounts();
+    public List<ProductCountDto> getAllProductAmounts() {
+        return productCountService.getAllProductAmounts();
     }
 
     @PostMapping
-    public ProductAmountDto addProductAmount(@RequestBody ProductAmountDto dto) {
-        return productAmountService.addProductAmount(dto);
+    public ProductCountDto addProductAmount(@RequestBody ProductCountDto dto) {
+        return productCountService.addProductAmount(dto);
     }
 
     @PutMapping
-    public List<ProductAmountDto> updateAllProductAmounts(@RequestBody List<ProductAmountDto> request) {
-        return productAmountService.updateAllProductAmounts(request);
+    public List<ProductCountDto> updateAllProductAmounts(@RequestBody List<ProductCountDto> request) {
+        return productCountService.updateAllProductAmounts(request);
     }
 
     @DeleteMapping
     public void deleteAllProductAmounts() {
-        productAmountService.deleteAllProductAmounts();
+        productCountService.deleteAllProductAmounts();
     }
 
     @GetMapping("/{id}")
-    public ProductAmountDto getProductAmountById(@PathVariable("id") Long id) {
-        return productAmountService.getProductAmountById(id);
+    public ProductCountDto getProductAmountById(@PathVariable("id") Long id) {
+        return productCountService.getProductAmountById(id);
     }
 
     @PutMapping("/{id}")
-    public ProductAmountDto updateProductAmountById(@PathVariable("id") Long id,
-                                     @RequestBody ProductAmountDto dto) {
-        return productAmountService.updateProductAmountById(id, dto);
+    public ProductCountDto updateProductAmountById(@PathVariable("id") Long id,
+                                                   @RequestBody ProductCountDto dto) {
+        return productCountService.updateProductAmountById(id, dto);
     }
 
     @DeleteMapping("/{id}")
     public void deleteProductAmountById(@PathVariable("id") Long id) {
-        productAmountService.deleteProductAmountById(id);
+        productCountService.deleteProductAmountById(id);
     }
 
 }

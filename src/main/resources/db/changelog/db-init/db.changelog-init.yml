@@ -194,3 +194,22 @@ databaseChangeLog:
               - column:
                   name: closed
                   type: bool
+  - changeSet:
+      id : remove-table-cancellations
+      author: mike
+      changes:
+        - renameColumn:
+            tableName: prod_amount
+            oldColumnName: amount
+            newColumnName: count
+        - renameTable:
+            oldTableName: prod_amount
+            newTableName: prod_count
+        - dropForeignKeyConstraint:
+            baseTableName: operations
+            constraintName: oper_cancellation_fkey
+        - dropTable:
+            tableName: cancellations
+        - dropColumn:
+            tableName: operations
+            columnName: cancellation_id

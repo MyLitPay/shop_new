@@ -18,7 +18,4 @@ public interface ProductService {
 
     Product findProductById(long id);
     Product findByNameAndPrice(String name, Double price);
-
-//    List<ProductDto> getProducts();
-//    ResultResponse addProduct(InvoiceDto invoiceDto);
 }

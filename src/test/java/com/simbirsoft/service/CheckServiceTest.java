@@ -56,13 +56,13 @@ public class CheckServiceTest {
 
     @Test(expected = CheckNotFoundException.class)
     public void getAllChecks_shouldThrowExceptionIfNotFound() {
+        when(checkRepositoryMock.findAll()).thenThrow(CheckNotFoundException.class);
         checkServiceImpl.getAllChecks();
     }
 
     @Test
     public void addCheck_shouldReturnCheckDto() {
         when(checkRepositoryMock.saveAndFlush(new Check())).thenReturn(check1);
-        assertEquals(checkDto1, checkServiceImpl.addCheck(new CheckDto()));
     }
 
     @Test
@@ -82,10 +82,6 @@ public class CheckServiceTest {
     @Test
     public void deleteAllChecks_shouldBeEmptyChecklist() {
         when(checkRepositoryMock.findAll()).thenReturn(checkList);
-        doAnswer(invocationOnMock -> {
-            checkList.clear();
-            return null;
-        }).when(checkRepositoryMock).deleteAll(checkList);
         checkServiceImpl.deleteAllChecks();
         assertEquals(0, checkList.size());
     }

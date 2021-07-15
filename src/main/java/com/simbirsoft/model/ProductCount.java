@@ -7,10 +7,10 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "prod_amount")
+@Table(name = "prod_count")
 @NoArgsConstructor
 @Getter @Setter
-public class ProductAmount {
+public class ProductCount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -20,5 +20,5 @@ public class ProductAmount {
     @JoinColumn(name = "prod_id")
     private Product product;
 
-    private Integer amount;
+    private Integer count;
 }

@@ -18,21 +18,18 @@ public class GeneralServiceImpl implements GeneralService {
     final GroupService groupService;
     final InvoiceService invoiceService;
     final ProductService productService;
-    final ProductAmountService productAmountService;
+    final ProductCountService productCountService;
     final CheckService checkService;
-    final CancellationService cancellationService;
     final OperationService operationService;
 
     public GeneralServiceImpl(GroupService groupService, InvoiceService invoiceService,
-                              ProductService productService, ProductAmountService productAmountService,
-                              CheckService checkService, CancellationService cancellationService,
-                              OperationService operationService) {
+                              ProductService productService, ProductCountService productCountService,
+                              CheckService checkService, OperationService operationService) {
         this.groupService = groupService;
         this.invoiceService = invoiceService;
         this.productService = productService;
-        this.productAmountService = productAmountService;
+        this.productCountService = productCountService;
         this.checkService = checkService;
-        this.cancellationService = cancellationService;
         this.operationService = operationService;
     }
 
@@ -44,14 +41,14 @@ public class GeneralServiceImpl implements GeneralService {
                 ProductDto productDtoFromDB = productService.addProduct(productDto);
 
 
-                ProductAmountDto productAmountDto = InvoiceDtoToProductDtoMapper.INSTANCE.toProductAmountDto(invoiceDto);
-                productAmountDto.setProdId(productDtoFromDB.getId());
-                productAmountService.addProductAmount(productAmountDto);
+                ProductCountDto productCountDto = InvoiceDtoToProductDtoMapper.INSTANCE.toProductAmountDto(invoiceDto);
+                productCountDto.setProdId(productDtoFromDB.getId());
+                productCountService.addProductAmount(productCountDto);
 
             } else {
-                ProductAmount productAmount = productAmountService.findByProduct(product);
-                productAmount.setAmount(productAmount.getAmount() + invoiceDto.getAmount());
-                productAmountService.updateProductAmountById(productAmount.getId(), ProductAmountMapper.INSTANCE.toDTO(productAmount));
+                ProductCount productCount = productCountService.findByProduct(product);
+                productCount.setCount(productCount.getCount() + invoiceDto.getCount());
+                productCountService.updateProductAmountById(productCount.getId(), ProductCountMapper.INSTANCE.toDTO(productCount));
             }
     }
 
@@ -106,16 +103,16 @@ public class GeneralServiceImpl implements GeneralService {
             List<ProductForCheckDto> productForCheckDtoList = getProductForCheckDtoList(check);
             for (ProductForCheckDto p : productForCheckDtoList) {
                 if (productMap.containsKey(p)) {
-                    productMap.put(p, productMap.get(p) + p.getAmount());
+                    productMap.put(p, productMap.get(p) + p.getCount());
                 } else {
-                    productMap.put(p, p.getAmount());
+                    productMap.put(p, p.getCount());
                 }
             }
         }
 
         for (ProductForCheckDto product : productMap.keySet()) {
-            product.setAmount(productMap.get(product));
-            product.setSum(product.getPrice() * product.getAmount());
+            product.setCount(productMap.get(product));
+            product.setSum(product.getPrice() * product.getCount());
         }
 
         Set<ProductForCheckDto> set = productMap.keySet();
@@ -147,6 +144,15 @@ public class GeneralServiceImpl implements GeneralService {
     }
 
     @Override
+    public CheckResponse removeProductFromCheck(OperationDto operationDto) {
+        OperationDto operationDtoRemove = OperationDtoMapper.INSTANCE.map(operationDto);
+        operationDtoRemove.setCount(-operationDto.getCount());
+        operationDtoRemove.setSum(-operationDto.getSum());
+
+        return addProductToCheck(operationDtoRemove);
+    }
+
+    @Override
     public Map<String, Double> getAVGCheckReport() {
         List<Check> checkList = checkService.findClosedChecks(OperationType.SELLING);
         Double totalSum = checkList.stream().map(Check::getTotalSum).reduce(Double::sum).get();
@@ -171,7 +177,7 @@ public class GeneralServiceImpl implements GeneralService {
             productForCheckDto.setGroupName(product.getGroup().getName());
             Integer amount = operationService.findAmountOfProductByCheckAndProduct(check, product);
             Double sum = product.getPrice() * amount;
-            productForCheckDto.setAmount(amount);
+            productForCheckDto.setCount(amount);
             productForCheckDto.setSum(sum);
 
             productForCheckDtoList.add(productForCheckDto);
@@ -184,8 +190,8 @@ public class GeneralServiceImpl implements GeneralService {
         List<String> errors = new ArrayList<>();
         for (ProductForCheckDto product : dtoList) {
             Product prod = productService.findProductById(product.getId());
-            ProductAmount amount = productAmountService.findByProduct(prod);
-            if (amount.getAmount() < product.getAmount()) {
+            ProductCount amount = productCountService.findByProduct(prod);
+            if (amount.getCount() < product.getCount()) {
                 errors.add(product.getProductName() + " - not enough");
             }
         }
@@ -193,9 +199,9 @@ public class GeneralServiceImpl implements GeneralService {
         if (errors.isEmpty()) {
             for (ProductForCheckDto product : dtoList) {
                 Product prod = productService.findProductById(product.getId());
-                ProductAmount amount = productAmountService.findByProduct(prod);
-                amount.setAmount(amount.getAmount() - product.getAmount());
-                productAmountService.updateProductAmountById(amount.getId(), ProductAmountMapper.INSTANCE.toDTO(amount));
+                ProductCount amount = productCountService.findByProduct(prod);
+                amount.setCount(amount.getCount() - product.getCount());
+                productCountService.updateProductAmountById(amount.getId(), ProductCountMapper.INSTANCE.toDTO(amount));
                 CheckDto checkDto = CheckMapper.INSTANCE.toDTO(checkService.findCheckById(id));
                 checkDto.setTotalSum(totalSum);
                 checkDto.setDate(new Date());
