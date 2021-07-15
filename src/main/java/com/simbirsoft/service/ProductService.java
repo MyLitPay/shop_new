@@ -2,6 +2,7 @@ package com.simbirsoft.service;
 
 import com.simbirsoft.api.dto.ProductDto;
 import com.simbirsoft.api.response.ResultResponse;
+import com.simbirsoft.model.Group;
 import com.simbirsoft.model.Product;
 import org.springframework.http.ResponseEntity;
 
@@ -18,6 +19,8 @@ public interface ProductService {
 
     Product findProductById(long id);
     Product findByNameAndPrice(String name, Double price);
+    List<ProductDto> findProductDtoListByProductName(String productName);
+    List<ProductDto> findProductListByGroup(Group group);
 
 //    List<ProductDto> getProducts();
 //    ResultResponse addProduct(InvoiceDto invoiceDto);

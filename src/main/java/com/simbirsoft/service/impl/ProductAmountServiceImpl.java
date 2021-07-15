@@ -36,7 +36,7 @@ public class ProductAmountServiceImpl implements ProductAmountService {
                 .map(ProductAmountMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
         if (list.isEmpty()) {
-            throw new CancellationNotFoundException("Product amounts not found");
+            throw new ProductAmountNotFoundException();
         }
         return list;
     }
@@ -99,12 +99,12 @@ public class ProductAmountServiceImpl implements ProductAmountService {
 
     public ProductAmount findProductAmountById(long id) {
         return productAmountRepository.findById(id)
-                .orElseThrow(() -> new ProductAmountNotFoundException("ProductAmount not found"));
+                .orElseThrow(ProductAmountNotFoundException::new);
     }
 
     public ProductAmount findByProduct(Product product) {
         return productAmountRepository.findByProduct(product)
-                .orElseThrow(() -> new ProductAmountNotFoundException("Amount not found"));
+                .orElseThrow(ProductAmountNotFoundException::new);
     }
 
     private ProductAmount updateProductAmountData(ProductAmount productAmount, ProductAmountDto dto) {
@@ -128,6 +128,6 @@ public class ProductAmountServiceImpl implements ProductAmountService {
 
     private Product getProductFromDB(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+                .orElseThrow(ProductNotFoundException::new);
     }
 }

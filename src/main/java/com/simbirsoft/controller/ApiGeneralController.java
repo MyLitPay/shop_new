@@ -4,6 +4,7 @@ import com.simbirsoft.api.dto.OperationDto;
 import com.simbirsoft.api.response.CancellationResponse;
 import com.simbirsoft.api.response.CheckResponse;
 import com.simbirsoft.api.response.ResultResponse;
+import com.simbirsoft.api.response.SearchProductResponse;
 import com.simbirsoft.service.GeneralService;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,5 +40,15 @@ public class ApiGeneralController {
     @PostMapping("/cancellation/close")
     public ResultResponse closeCancellationCheck(@RequestBody CancellationResponse cancellationResponse) {
         return generalService.closeCancellationCheck(cancellationResponse);
+    }
+
+    @PostMapping("/products/searchByName")
+    public SearchProductResponse getProductsByName(@RequestParam String productName) {
+        return generalService.getProductsByName(productName);
+    }
+
+    @PostMapping("/products/searchByGroup")
+    public SearchProductResponse getProductsByGroup(@RequestParam Long groupId) {
+        return generalService.getProductsByGroup(groupId);
     }
 }

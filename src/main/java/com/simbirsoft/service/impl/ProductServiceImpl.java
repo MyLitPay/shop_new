@@ -37,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
                 .map(ProductMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
         if (list.isEmpty()) {
-            throw new CancellationNotFoundException("Products not found");
+            throw new ProductNotFoundException();
         }
         return list;
     }
@@ -96,12 +96,28 @@ public class ProductServiceImpl implements ProductService {
 
     public Product findProductById(long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+                .orElseThrow(ProductNotFoundException::new);
     }
 
     public Product findByNameAndPrice(String name, Double price) {
         return productRepository.findByNameAndPrice(name, price)
                 .orElse(null);
+    }
+
+    public List<ProductDto> findProductDtoListByProductName(String productName) {
+        List<Product> productList = productRepository.findByNameContainingIgnoreCase(productName);
+        if (productList.isEmpty()) {
+            throw new ProductNotFoundException();
+        }
+        return productList.stream().map(ProductMapper.INSTANCE::toDTO).collect(Collectors.toList());
+    }
+
+    public List<ProductDto> findProductListByGroup(Group group) {
+       List<Product> productList = productRepository.findByGroup(group);
+       if (productList.isEmpty()) {
+           throw new ProductNotFoundException();
+       }
+       return productList.stream().map(ProductMapper.INSTANCE::toDTO).collect(Collectors.toList());
     }
 
     private Product updateProductData(Product product, ProductDto dto) {
@@ -131,6 +147,6 @@ public class ProductServiceImpl implements ProductService {
 
     private Group getGroupFromDB(Long id) {
         return groupRepository.findById(id)
-                .orElseThrow(() -> new GroupNotFoundException("Group not found"));
+                .orElseThrow(GroupNotFoundException::new);
     }
 }
