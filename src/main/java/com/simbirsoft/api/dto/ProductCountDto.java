@@ -5,8 +5,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ProductAmountDto {
+public class ProductCountDto {
     private Long id;
     private Long prodId;
-    private Integer amount;
+    private Integer count;
 }

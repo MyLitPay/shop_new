@@ -12,7 +12,7 @@ public interface ProductService {
     List<ProductDto> getAllProducts();
     ProductDto addProduct(ProductDto dto);
     List<ProductDto> updateAllProducts(List<ProductDto> request);
-    ResultResponse deleteAllProducts();
+    void deleteAllProducts();
     ProductDto getProductById(Long id);
     ProductDto updateProductById(Long id, ProductDto dto);
     void deleteProductById(Long id);

@@ -4,6 +4,7 @@ import com.simbirsoft.api.dto.GroupDto;
 import com.simbirsoft.api.response.ResultResponse;
 import com.simbirsoft.api.response.ResultResponseType;
 import com.simbirsoft.exception.CancellationNotFoundException;
+import com.simbirsoft.exception.CheckNotFoundException;
 import com.simbirsoft.exception.GroupNotFoundException;
 import com.simbirsoft.mapper.GroupMapper;
 import com.simbirsoft.model.Group;
@@ -56,14 +57,12 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public ResultResponse deleteAllGroups() {
-        try {
+    public void deleteAllGroups() {
             List<Group> groups = groupRepository.findAll();
             groupRepository.deleteAll(groups);
-            return new ResultResponse(ResultResponseType.OK);
-        } catch (Exception ex) {
-            return new ResultResponse(ResultResponseType.ERROR);
-        }
+            if (groups.isEmpty()) {
+                throw new GroupNotFoundException();
+            }
     }
 
     @Override

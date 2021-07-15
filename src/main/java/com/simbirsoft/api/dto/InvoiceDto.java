@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 public class InvoiceDto {
     private Long id;
     private String name;
-    private Integer amount;
+    private Integer count;
     private Double price;
     private Double sum;
     private Long groupId;

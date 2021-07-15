@@ -61,16 +61,14 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public ResultResponse deleteAllInvoices() {
-        try {
-            List<Invoice> invoices = invoiceRepository.findAll();
-            for (Invoice invoice : invoices) {
-                deleteConstraints(invoice);
-            }
-            invoiceRepository.deleteAll(invoices);
-            return new ResultResponse(ResultResponseType.OK);
-        } catch (Exception ex) {
-            return new ResultResponse(ResultResponseType.ERROR);
+    public void deleteAllInvoices() {
+        List<Invoice> invoices = invoiceRepository.findAll();
+        for (Invoice invoice : invoices) {
+            deleteConstraints(invoice);
+        }
+        invoiceRepository.deleteAll(invoices);
+        if (invoices.isEmpty()) {
+            throw new InvoiceNotFoundException();
         }
     }
 
@@ -89,8 +87,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public void deleteInvoiceById(Long id) {
-            deleteConstraints(findInvoiceById(id));
-            invoiceRepository.deleteById(id);
+        deleteConstraints(findInvoiceById(id));
+        invoiceRepository.deleteById(id);
     }
 
     public Invoice findInvoiceById(long id) {
@@ -101,7 +99,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private Invoice updateInvoiceData(Invoice invoice, InvoiceDto invoiceDto) {
         invoice.setName(invoiceDto.getName());
         invoice.setPrice(invoiceDto.getPrice());
-        invoice.setAmount(invoiceDto.getAmount());
+        invoice.setAmount(invoiceDto.getCount());
         invoice.setSum(invoiceDto.getSum());
 
         return setConstraints(invoiceDto, invoice);

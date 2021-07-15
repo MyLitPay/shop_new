@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 public class OperationDto {
     private Long id;
     private String operation;
-    private Integer amount;
+    private Integer count;
     private Double sum;
     private Long prodId;
     private Long checkId;

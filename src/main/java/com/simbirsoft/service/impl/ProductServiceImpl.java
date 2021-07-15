@@ -4,6 +4,7 @@ import com.simbirsoft.api.dto.ProductDto;
 import com.simbirsoft.api.response.ResultResponse;
 import com.simbirsoft.api.response.ResultResponseType;
 import com.simbirsoft.exception.CancellationNotFoundException;
+import com.simbirsoft.exception.CheckNotFoundException;
 import com.simbirsoft.exception.GroupNotFoundException;
 import com.simbirsoft.exception.ProductNotFoundException;
 import com.simbirsoft.mapper.ProductMapper;
@@ -62,16 +63,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResultResponse deleteAllProducts() {
-        try {
+    public void deleteAllProducts() {
             List<Product> products = productRepository.findAll();
             for (Product product : products) {
                 deleteConstraints(product);
             }
             productRepository.deleteAll(products);
-            return new ResultResponse(ResultResponseType.OK);
-        } catch (Exception ex) {
-            return new ResultResponse(ResultResponseType.ERROR);
+        if (products.isEmpty()) {
+            throw new ProductNotFoundException();
         }
     }
 
