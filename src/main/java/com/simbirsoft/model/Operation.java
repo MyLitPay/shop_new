@@ -27,7 +27,7 @@ public class Operation {
     private Product product;
 
     @Column(name = "prod_amount")
-    private Integer amount;
+    private Integer count;
 
     private Double sum;
 

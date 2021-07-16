@@ -6,6 +6,7 @@ import com.simbirsoft.api.response.ProductsReport;
 import com.simbirsoft.api.response.CancellationResponse;
 import com.simbirsoft.api.response.CheckResponse;
 import com.simbirsoft.api.response.ResultResponse;
+import com.simbirsoft.api.response.SearchProductResponse;
 
 import java.util.Map;
 
@@ -19,6 +20,10 @@ public interface GeneralService {
     CancellationResponse addProductForCancellation(OperationDto operationDto);
 
     ResultResponse closeCancellationCheck(CancellationResponse cancellationResponse);
+
+    SearchProductResponse getProductsByName(String productName);
+
+    SearchProductResponse getProductsByGroup(Long groupId);
 
     ProductsReport getSaleProductsReport();
 

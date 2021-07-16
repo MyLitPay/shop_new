@@ -2,6 +2,11 @@ package com.simbirsoft.service.impl;
 
 import com.simbirsoft.api.dto.*;
 import com.simbirsoft.api.response.*;
+import com.simbirsoft.mapper.CheckMapper;
+import com.simbirsoft.mapper.InvoiceDtoToProductDtoMapper;
+import com.simbirsoft.mapper.ProductToProductForCheckDtoMapper;
+import com.simbirsoft.model.*;
+import com.simbirsoft.api.response.*;
 import com.simbirsoft.exception.ClosedCheckException;
 import com.simbirsoft.mapper.*;
 import com.simbirsoft.model.*;
@@ -95,6 +100,19 @@ public class GeneralServiceImpl implements GeneralService {
 
         return close(cancellationResponse.getProductList(),
                 cancellationResponse.getId(), cancellationResponse.getTotalSum());
+    }
+
+    @Override
+    public SearchProductResponse getProductsByName(String productName) {
+        List<ProductDto> productDtoList = productService.findProductDtoListByProductName(productName);
+        return new SearchProductResponse(productDtoList);
+    }
+
+    @Override
+    public SearchProductResponse getProductsByGroup(Long groupId) {
+        Group group = groupService.findGroupById(groupId);
+        List <ProductDto> productDtoList = productService.findProductListByGroup(group);
+        return new SearchProductResponse(productDtoList);
     }
 
     private ProductsReport productsReport(List<Check> checkList) {

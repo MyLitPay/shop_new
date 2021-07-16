@@ -58,14 +58,15 @@ public class ProductCountServiceImpl implements ProductCountService {
 
     @Override
     public void deleteAllProductAmounts() {
-            List<ProductCount> productCounts = productCountRepository.findAll();
-            for (ProductCount amounts : productCounts) {
-                deleteConstraints(amounts);
-            }
-            productCountRepository.deleteAll(productCounts);
+        List<ProductCount> productCounts = productCountRepository.findAll();
         if (productCounts.isEmpty()) {
             throw new ProductAmountNotFoundException();
         }
+
+        for (ProductCount amounts : productCounts) {
+            deleteConstraints(amounts);
+        }
+        productCountRepository.deleteAll(productCounts);
     }
 
     @Override
@@ -86,8 +87,8 @@ public class ProductCountServiceImpl implements ProductCountService {
 
     @Override
     public void deleteProductAmountById(Long id) {
-            deleteConstraints(findProductAmountById(id));
-            productCountRepository.deleteById(id);
+        deleteConstraints(findProductAmountById(id));
+        productCountRepository.deleteById(id);
     }
 
     public ProductCount findProductAmountById(long id) {

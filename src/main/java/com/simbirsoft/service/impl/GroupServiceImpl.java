@@ -58,11 +58,12 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public void deleteAllGroups() {
-            List<Group> groups = groupRepository.findAll();
-            groupRepository.deleteAll(groups);
-            if (groups.isEmpty()) {
-                throw new GroupNotFoundException();
-            }
+        List<Group> groups = groupRepository.findAll();
+        if (groups.isEmpty()) {
+            throw new GroupNotFoundException();
+        }
+        groupRepository.deleteAll(groups);
+
     }
 
     @Override
@@ -80,8 +81,8 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public void deleteGroupById(Long id) {
-            findGroupById(id);
-            groupRepository.deleteById(id);
+        findGroupById(id);
+        groupRepository.deleteById(id);
     }
 
     public Group findGroupById(long id) {

@@ -63,13 +63,14 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public void deleteAllInvoices() {
         List<Invoice> invoices = invoiceRepository.findAll();
+        if (invoices.isEmpty()) {
+            throw new InvoiceNotFoundException();
+        }
+
         for (Invoice invoice : invoices) {
             deleteConstraints(invoice);
         }
         invoiceRepository.deleteAll(invoices);
-        if (invoices.isEmpty()) {
-            throw new InvoiceNotFoundException();
-        }
     }
 
     @Override
@@ -99,7 +100,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private Invoice updateInvoiceData(Invoice invoice, InvoiceDto invoiceDto) {
         invoice.setName(invoiceDto.getName());
         invoice.setPrice(invoiceDto.getPrice());
-        invoice.setAmount(invoiceDto.getCount());
+        invoice.setCount(invoiceDto.getCount());
         invoice.setSum(invoiceDto.getSum());
 
         return setConstraints(invoiceDto, invoice);
