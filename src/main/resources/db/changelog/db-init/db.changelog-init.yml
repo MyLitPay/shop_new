@@ -55,7 +55,7 @@ databaseChangeLog:
                   name: group_id
                   type: int8
         - createTable:
-            tableName: prod_amount
+            tableName: prod_count
             columns:
               - column:
                   autoIncrement: true
@@ -66,12 +66,12 @@ databaseChangeLog:
                   type: int8
               - column:
                   constraints:
-                    foreignKeyName: amount_prod_fkey
+                    foreignKeyName: count_prod_fkey
                     references: products(id)
                   name: prod_id
                   type: int8
               - column:
-                  name: amount
+                  name: count
                   type: int4
         - createTable:
             tableName: checks
@@ -163,7 +163,7 @@ databaseChangeLog:
                   name: product_name
                   type: varchar(255)
               - column:
-                  name: amount
+                  name: count
                   type: int4
               - column:
                   name: price
@@ -198,13 +198,13 @@ databaseChangeLog:
       id : remove-table-cancellations
       author: mike
       changes:
-        - renameColumn:
-            tableName: prod_amount
-            oldColumnName: amount
-            newColumnName: count
-        - renameTable:
-            oldTableName: prod_amount
-            newTableName: prod_count
+#        - renameColumn:
+#            tableName: prod_amount
+#            oldColumnName: amount
+#            newColumnName: count
+#        - renameTable:
+#            oldTableName: prod_amount
+#            newTableName: prod_count
         - dropForeignKeyConstraint:
             baseTableName: operations
             constraintName: oper_cancellation_fkey

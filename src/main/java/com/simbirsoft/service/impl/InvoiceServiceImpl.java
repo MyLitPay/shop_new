@@ -100,7 +100,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private Invoice updateInvoiceData(Invoice invoice, InvoiceDto invoiceDto) {
         invoice.setName(invoiceDto.getName());
         invoice.setPrice(invoiceDto.getPrice());
-        invoice.setAmount(invoiceDto.getCount());
+        invoice.setCount(invoiceDto.getCount());
         invoice.setSum(invoiceDto.getSum());
 
         return setConstraints(invoiceDto, invoice);

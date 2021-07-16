@@ -132,7 +132,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     private Operation updateOperationData(Operation operation, OperationDto dto) {
-        operation.setAmount(dto.getCount());
+        operation.setCount(dto.getCount());
         operation.setSum(dto.getSum());
         operation.setOperation(stringToEnum(dto.getOperation()));
         return setConstraints(dto, operation);

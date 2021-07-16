@@ -68,10 +68,10 @@ public class CheckServiceImpl implements CheckService {
     @Override
     public void deleteAllChecks() {
         List<Check> checks = checkRepository.findAll();
-        checkRepository.deleteAll(checks);
         if (checks.isEmpty()) {
             throw new CheckNotFoundException();
         }
+        checkRepository.deleteAll(checks);
     }
 
     @Override

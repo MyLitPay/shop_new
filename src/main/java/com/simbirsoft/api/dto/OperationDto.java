@@ -12,5 +12,4 @@ public class OperationDto {
     private Double sum;
     private Long prodId;
     private Long checkId;
-    private Long cancellationId;
 }

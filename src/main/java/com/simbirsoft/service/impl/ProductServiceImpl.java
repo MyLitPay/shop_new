@@ -65,14 +65,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteAllProducts() {
-            List<Product> products = productRepository.findAll();
-            for (Product product : products) {
-                deleteConstraints(product);
-            }
-            productRepository.deleteAll(products);
+        List<Product> products = productRepository.findAll();
+        for (Product product : products) {
+            deleteConstraints(product);
+        }
         if (products.isEmpty()) {
             throw new ProductNotFoundException();
         }
+        productRepository.deleteAll(products);
+
     }
 
     @Override
@@ -90,8 +91,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProductById(Long id) {
-            deleteConstraints(findProductById(id));
-            productRepository.deleteById(id);
+        deleteConstraints(findProductById(id));
+        productRepository.deleteById(id);
     }
 
     public Product findProductById(long id) {
@@ -113,11 +114,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public List<ProductDto> findProductListByGroup(Group group) {
-       List<Product> productList = productRepository.findByGroup(group);
-       if (productList.isEmpty()) {
-           throw new ProductNotFoundException();
-       }
-       return productList.stream().map(ProductMapper.INSTANCE::toDTO).collect(Collectors.toList());
+        List<Product> productList = productRepository.findByGroup(group);
+        if (productList.isEmpty()) {
+            throw new ProductNotFoundException();
+        }
+        return productList.stream().map(ProductMapper.INSTANCE::toDTO).collect(Collectors.toList());
     }
 
     private Product updateProductData(Product product, ProductDto dto) {

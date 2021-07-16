@@ -19,7 +19,7 @@ public class Invoice {
     @Column(name = "product_name")
     private String name;
 
-    private Integer amount;
+    private Integer count;
 
     private Double price;
 
